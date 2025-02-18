@@ -44,8 +44,9 @@ model Category {
 }
 
 model Product {
-  id   String @id @default(uuid())
-  name String
+  id    String  @id @default(uuid())
+  image String?
+  name  String
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
