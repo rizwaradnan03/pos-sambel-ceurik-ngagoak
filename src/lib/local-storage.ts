@@ -9,3 +9,7 @@ export const UseLocalStorageGetItem = ({key}: {key: string}) => {
 export const UseLocalStorageClearItem = () => {
     localStorage.clear()
 }
+
+export const UseLocalStorageRemoveItem = ({ key }: {key: string}) => {
+    return localStorage.removeItem(key)
+}

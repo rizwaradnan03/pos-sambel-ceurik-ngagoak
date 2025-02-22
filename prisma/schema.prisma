@@ -9,13 +9,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 enum RoleEnum {
   ADMIN
   CASHIER
+  INVENTORY
+  ANALYTICS
 }
 
 model User {
@@ -25,8 +27,8 @@ model User {
   email    String   @unique
   password String
 
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -35,8 +37,8 @@ model Category {
   id    String @id @default(uuid())
   title String
 
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   ProductCategory ProductCategory[]
 
@@ -48,8 +50,8 @@ model Product {
   image String?
   name  String
 
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   ProductCategory   ProductCategory[]
   ProductIngredient ProductIngredient[]
@@ -66,8 +68,8 @@ model ProductCategory {
   Product  Product?  @relation(fields: [productId], references: [id])
   Category Category? @relation(fields: [categoryId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("product_categories")
 }
@@ -84,12 +86,25 @@ model Ingredient {
   stock         String
   unitOfMeasure UnitOfMeasureIngredientEnum @map("unit_of_measure")
 
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   ProductIngredient ProductIngredient[]
+  LogIngredient     LogIngredient[]
 
   @@map("ingredient")
+}
+
+model LogIngredient {
+  id           String  @id @default(uuid())
+  ingredientId String? @map("ingredient_id")
+  description  String
+
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+  Ingredient Ingredient? @relation(fields: [ingredientId], references: [id])
+
+  @@map("log_ingredients")
 }
 
 model ProductIngredient {
@@ -120,8 +135,22 @@ model Order {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   OrderProduct OrderProduct[]
+  LogOrder     LogOrder[]
 
   @@map("orders")
+}
+
+model LogOrder {
+  id String @id @default(uuid())
+  orderId String? @map("order_id")
+  description String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Order   Order?  @relation(fields: [orderId], references: [id])
+
+  @@map("log_orders")
 }
 
 model OrderProduct {
