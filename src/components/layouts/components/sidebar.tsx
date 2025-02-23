@@ -1,3 +1,5 @@
+"use client"
+
 import { Sidebar as SidebarComponent, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import React, { useEffect, useState } from 'react'
 import { Separator } from '@/components/ui/separator'
@@ -16,13 +18,6 @@ const Sidebar = ({ children, role }: { children: TReactNode, role: RoleEnum }) =
 
     const handleLogout = () => {
 
-        // toast.success("Anda Berhasil Logout!")
-
-        // if (role === "teacher") {
-        //     navigate("/auth/sign-in/teacher")
-        // } else if (role === "student") {
-        //     navigate("/auth/sign-in/student")
-        // }
     }
 
     useEffect(() => {
@@ -30,17 +25,20 @@ const Sidebar = ({ children, role }: { children: TReactNode, role: RoleEnum }) =
             setRenderSidebar(inventoryUrlItems)
         } else if (role === "ANALYTICS") {
             setRenderSidebar(analyticsUrlItems)
+        }else if(role === "ADMIN"){
+            setRenderSidebar(inventoryUrlItems)
         }
     }, [role])
 
     return (
         <SidebarProvider>
             <SidebarComponent>
-                {/* <SidebarHeader>
+                <SidebarHeader>
                     <React.Fragment>
-                        <CourseSwitcher />
+                        {/* <CourseSwitcher /> */}
+                        <h1 className='text-primary font-bold text-xl text-center'>Sambel Ceurik Ngagoak</h1>
                     </React.Fragment>
-                </SidebarHeader> */}
+                </SidebarHeader>
                 <SidebarContent className='gap-0'>
                     <SidebarGroup>
                         <SidebarGroupContent>

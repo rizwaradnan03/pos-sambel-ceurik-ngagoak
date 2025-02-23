@@ -1,18 +1,23 @@
 import { ISidebarItems } from "@/interfaces/sidebar-interface";
-import { Home, House } from "lucide-react";
+import { Apple, Archive, Home, House, LayoutDashboard } from "lucide-react";
 
 const baseRole = "/inventory/";
 
 export const inventoryUrlItems: ISidebarItems[] = [
   {
     title: "Dashboard",
-    url: baseRole + "dashboard",
-    icon: Home,
+    url: baseRole,
+    icon: LayoutDashboard,
   },
   {
-    title: "Inventory",
-    url: baseRole + "inventory",
-    icon: House
+    title: "Produk",
+    url: baseRole + "product",
+    icon: Apple,
+  },
+  {
+    title: "Bahan Baku",
+    url: baseRole + "ingredient",
+    icon: Archive
   },
   {
     title: "Logout",

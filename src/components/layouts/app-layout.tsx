@@ -8,10 +8,16 @@ const AppLayout = ({ children, isUsingSidebar, role }: { children: TReactNode, i
     <>
       {isUsingSidebar === "true" ? (
         <SidebarLayout role={role}>
-          {children}
+          <main className='flex p-4 min-h-screen bg-gray-100'>
+
+            {children}
+          </main>
         </SidebarLayout>
       ) : (
-        { children }
+        <main className='flex p-4 min-h-screen bg-gray-100'>
+
+          {children}
+        </main>
       )}
     </>
   )

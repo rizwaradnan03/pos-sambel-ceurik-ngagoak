@@ -4,12 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
-  const pathName = req.nextUrl.pathname
-  
+  const pathName = req.nextUrl.pathname;
+
   const token = await getToken({
     req,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXT_AUTH_SECRET,
   });
+
+  console.log("ada token ? ", token )
 
   if (!token) {
     let url = new URL("/auth/login/", req.url);
@@ -23,9 +25,10 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: [
-        // '/api/authenticated/:path*',
-        // '/cashier/:path*',
-        // '/admin/:path*'
-    ]
-}
+  matcher: [
+    "/api/authenticated/:path*",
+    "/cashier/:path*",
+    "/admin/:path*",
+    "/inventory/:path*",
+  ],
+};
