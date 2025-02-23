@@ -1,5 +1,6 @@
 "use client"
 
+import CreateCategory from '@/components/dialog/category/create-category'
 import AddStockIngredient from '@/components/dialog/ingredient/add-stock-ingredient'
 import CreateIngredient from '@/components/dialog/ingredient/create-ingredient'
 import CreateProduct from '@/components/dialog/product/create-product'
@@ -8,39 +9,40 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { UseFetchFindManyCategory } from '@/hooks/api/category/findMany'
 import { UseFetchFindManyIngredients } from '@/hooks/api/ingredient/findMany'
 import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany'
-import { ISIngredient, ISProduct } from '@/interfaces/schema-interface'
+import { ISCategory } from '@/interfaces/schema-interface'
 import { Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const page = () => {
-    const [products, setProducts] = useState<ISProduct[] | undefined>(undefined)
+    const [categories, setCategories] = useState<ISCategory[] | undefined>(undefined)
 
-    const [isDoneCreatingProduct, setIsDoneCreatingProduct] = useState<boolean>(false)
+    const [isDoneCreatingCategory, setIsDoneCreatingCategory] = useState<boolean>(false)
 
-    const fetchProduct = async () => {
+    const fetchCategory = async () => {
         try {
-            const fetch = await UseFetchFindManyProduct()
+            const fetch = await UseFetchFindManyCategory()
 
-            setProducts(fetch.data)
+            setCategories(fetch.data)
         } catch (error: any) {
             toast.error(error.message)
         }
     }
 
     useEffect(() => {
-        fetchProduct()
-    }, [isDoneCreatingProduct])
+        fetchCategory()
+    }, [isDoneCreatingCategory])
 
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-            <h1 className="font-bold text-xl tracking-wide">Produk</h1>
+            <h1 className="font-bold text-xl tracking-wide">Kategori</h1>
             <div className="flex flex-wrap gap-3 mt-3 sm:mt-0">
-              <CreateProduct setIsDoneCreatingProduct={setIsDoneCreatingProduct} />
+              <CreateCategory setIsDoneCreatingCategory={setIsDoneCreatingCategory} />
             </div>
           </div>
     
@@ -50,16 +52,14 @@ const page = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>No</TableHead>
-                  <TableHead>Nama</TableHead>
-                  <TableHead>Harga</TableHead>
+                  <TableHead>Judul</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products?.map((product, index) => (
-                  <TableRow key={product.id}>
+                {categories?.map((category, index) => (
+                  <TableRow key={category.id}>
                     <TableHead>{index + 1}</TableHead>
-                    <TableHead>{product.name}</TableHead>
-                    <TableHead>{product.price}</TableHead>
+                    <TableHead>{category.title}</TableHead>
                   </TableRow>
                 ))}
               </TableBody>

@@ -10,6 +10,11 @@ export const inventoryUrlItems: ISidebarItems[] = [
     icon: LayoutDashboard,
   },
   {
+    title: "Kategori",
+    url: baseRole + "category",
+    icon: Apple,
+  },
+  {
     title: "Produk",
     url: baseRole + "product",
     icon: Apple,

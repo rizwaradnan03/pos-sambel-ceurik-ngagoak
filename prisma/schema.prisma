@@ -193,7 +193,7 @@ model LogOrder {
   @@map("log_orders")
 }
 
-// ### EXPENSES (BIAYA OPERASIONAL) ###
+// ### EXPENSES (BIAYA OPERASIONAL) ### 
 model Expense {
   id          String  @id @default(uuid())
   name        String

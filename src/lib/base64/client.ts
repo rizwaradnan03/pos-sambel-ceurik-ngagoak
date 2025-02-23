@@ -10,7 +10,3 @@ export const UseEncodeFileToBase64 = async ({file}: {file: File}) => {
         reader.readAsDataURL(file)
     })
 }
-
-export const UseDecodeBase64ToFile = async ({base64String}: {base64String: string}) => {
-    return Buffer.from(base64String, 'base64')
-}

@@ -12,3 +12,13 @@ export interface IFIngredientPurchase {
     pricePerUnit: number;
     totalCost: number;
 }
+
+export interface IFProduct {
+    name: string;
+    price: number;
+    image?: string;
+}
+
+export interface IFCategory {
+    title: string;
+}
