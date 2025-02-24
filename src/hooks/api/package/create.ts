@@ -1,9 +1,9 @@
-import { IFProduct } from "@/interfaces/form-interface";
+import { IFPackage } from "@/interfaces/form-interface";
 import { ApiManager } from "@/lib/api";
 
-export const UseCreateProduct = async ({data}: {data: IFProduct}) => {
+export const UseCreatePackage = async ({data}: {data: IFPackage}) => {
     try {
-        const create = await ApiManager(`/product/create`, {
+        const create = await ApiManager(`/package/create`, {
             method: "POST",
             data: data
         })

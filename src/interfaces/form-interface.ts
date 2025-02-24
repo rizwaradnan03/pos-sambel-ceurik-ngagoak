@@ -1,3 +1,4 @@
+import { Option } from "@/components/ui/multiple-selector";
 import { UnitOfMeasureEnum } from "./schema-interface";
 
 export interface IFIngredient {
@@ -19,6 +20,29 @@ export interface IFProduct {
     image?: string;
 }
 
+export interface IFPackage {
+    name: string;
+    price: number;
+    image?: string;
+}
+
 export interface IFCategory {
     title: string;
+}
+
+export interface IFProductCategory {
+    productId: string;
+    selectedCategories: Option[];
+}
+
+export interface IFProductPackage {
+    packageId: string;
+    selectedProducts: Option[]
+}
+
+export interface IFCartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number
 }

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { Geist_Mono } from "next/font/google"; 
 import { Toaster } from "react-hot-toast";

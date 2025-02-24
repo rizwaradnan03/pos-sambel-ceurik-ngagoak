@@ -1,40 +1,24 @@
-"use client"
+"use client";
 
 import CreateCategory from '@/components/dialog/category/create-category'
-import AddStockIngredient from '@/components/dialog/ingredient/add-stock-ingredient'
-import CreateIngredient from '@/components/dialog/ingredient/create-ingredient'
-import CreateProduct from '@/components/dialog/product/create-product'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyCategory } from '@/hooks/api/category/findMany'
-import { UseFetchFindManyIngredients } from '@/hooks/api/ingredient/findMany'
-import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany'
+import { UseFetch } from '@/hooks/use-fetch'
 import { ISCategory } from '@/interfaces/schema-interface'
-import { Plus } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
 import toast from 'react-hot-toast'
 
 const page = () => {
-    const [categories, setCategories] = useState<ISCategory[] | undefined>(undefined)
-
     const [isDoneCreatingCategory, setIsDoneCreatingCategory] = useState<boolean>(false)
 
-    const fetchCategory = async () => {
-        try {
-            const fetch = await UseFetchFindManyCategory()
+    const {data: dataCategories} = UseFetch<ISCategory[]>({key: "inventoryCategories", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingCategory, stateSetter: setIsDoneCreatingCategory}], apiFunction: async () => {
+        let data: ISCategory[] = await UseFetchFindManyCategory()
+        data.unshift({id: "all", title: "Semua"} as ISCategory)
 
-            setCategories(fetch.data)
-        } catch (error: any) {
-            toast.error(error.message)
-        }
-    }
+        return data
+    }})
 
-    useEffect(() => {
-        fetchCategory()
-    }, [isDoneCreatingCategory])
+    console.log("data kategori ", dataCategories)
 
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
@@ -56,10 +40,10 @@ const page = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {categories?.map((category, index) => (
+                {dataCategories?.map((category, index) => (
                   <TableRow key={category.id}>
-                    <TableHead>{index + 1}</TableHead>
-                    <TableHead>{category.title}</TableHead>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{category.title}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

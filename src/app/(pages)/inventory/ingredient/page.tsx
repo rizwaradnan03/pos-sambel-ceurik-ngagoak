@@ -2,29 +2,20 @@
 
 import AddStockIngredient from "@/components/dialog/ingredient/add-stock-ingredient";
 import CreateIngredient from "@/components/dialog/ingredient/create-ingredient";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { UseFetchFindManyIngredients } from "@/hooks/api/ingredient/findMany";
+import { UseFetch } from "@/hooks/use-fetch";
 import { ISIngredient } from "@/interfaces/schema-interface";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const StockPage = () => {
-  const [ingredients, setIngredients] = useState<ISIngredient[] | undefined>(undefined);
   const [isDoneCreatingIngredient, setIsDoneCreatingIngredient] = useState<boolean>(false);
   const [isDoneAddingIngredientStock, setIsDoneAddingIngredientStock] = useState<boolean>(false);
 
-  const fetchIngredient = async () => {
-    try {
-      const fetch = await UseFetchFindManyIngredients();
-      setIngredients(fetch.data);
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchIngredient();
-  }, [isDoneCreatingIngredient, isDoneAddingIngredientStock]); // Fetch ulang jika ada perubahan
+  const {data: dataIngredients} = UseFetch<ISIngredient[]>({key: "inventoryIngredients", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingIngredient, stateSetter: setIsDoneCreatingIngredient}, {stateValue: isDoneAddingIngredientStock, stateSetter: setIsDoneAddingIngredientStock}], apiFunction: async () => {
+    return await UseFetchFindManyIngredients()
+  }})
 
   return (
     <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
@@ -49,12 +40,12 @@ const StockPage = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {ingredients?.map((ingredient, index) => (
+            {dataIngredients?.map((ingredient, index) => (
               <TableRow key={ingredient.id}>
-                <TableHead>{index + 1}</TableHead>
-                <TableHead>{ingredient.name}</TableHead>
-                <TableHead>{ingredient.stock}</TableHead>
-                <TableHead>{ingredient.unitOfMeasure}</TableHead>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{ingredient.name}</TableCell>
+                <TableCell>{ingredient.stock}</TableCell>
+                <TableCell>{ingredient.unitOfMeasure}</TableCell>
               </TableRow>
             ))}
           </TableBody>

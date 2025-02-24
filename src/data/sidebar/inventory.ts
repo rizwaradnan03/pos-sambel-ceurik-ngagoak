@@ -15,8 +15,18 @@ export const inventoryUrlItems: ISidebarItems[] = [
     icon: Apple,
   },
   {
+    title: "Kategori Produk",
+    url: baseRole + "product-category",
+    icon: Apple,
+  },
+  {
     title: "Produk",
     url: baseRole + "product",
+    icon: Apple,
+  },
+  {
+    title: "Paket",
+    url: baseRole + "package",
     icon: Apple,
   },
   {

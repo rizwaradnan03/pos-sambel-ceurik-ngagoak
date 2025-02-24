@@ -1,4 +1,5 @@
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import * as path from "path";
 
@@ -40,8 +41,14 @@ export const UseDecodedBase64ToFile = async ({
     const trimmedString = base64String.replace(/^data:.*?;base64,/, "");
     const fileBuffer = Buffer.from(trimmedString, "base64");
 
-    // Path dalam folder public tanpa process.cwd()
-    const saveDir = dir ? path.join("public", dir) : "public";
+    // Path ke folder public
+    const saveDir = dir ? path.join(process.cwd(), "public", dir) : path.join(process.cwd(), "public");
+
+    // Cek dan buat folder jika belum ada
+    if (!existsSync(saveDir)) {
+      await mkdir(saveDir, { recursive: true });
+    }
+
     const filePath = path.join(saveDir, fileName);
 
     await writeFile(filePath, fileBuffer);
@@ -50,6 +57,7 @@ export const UseDecodedBase64ToFile = async ({
 
     return { fileUrl };
   } catch (error: any) {
+    console.error("Error writing file:", error.message);
     throw new Error(error.message);
   }
 };

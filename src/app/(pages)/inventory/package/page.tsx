@@ -1,38 +1,40 @@
 "use client"
 
-import CreateProduct from '@/components/dialog/product/create-product'
+import CreatePackage from '@/components/dialog/package/create-package'
+import SaveProductPackage from '@/components/dialog/package/save-product-package'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany'
-import { ISProduct } from '@/interfaces/schema-interface'
+import { UseFetchFindManyPackage } from '@/hooks/api/package/findMany'
+import { ISPackage } from '@/interfaces/schema-interface'
+import { formatPrice } from '@/lib/number'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const page = () => {
-    const [products, setProducts] = useState<ISProduct[] | undefined>(undefined)
+    const [packages, setPackages] = useState<ISPackage[] | undefined>(undefined)
 
-    const [isDoneCreatingProduct, setIsDoneCreatingProduct] = useState<boolean>(false)
+    const [isDoneCreatingPackage, setIsDoneCreatingPackage] = useState<boolean>(false)
 
-    const fetchProduct = async () => {
+    const fetchPackage = async () => {
         try {
-            const fetch = await UseFetchFindManyProduct()
+            const fetch = await UseFetchFindManyPackage()
 
-            setProducts(fetch.data)
+            setPackages(fetch.data)
         } catch (error: any) {
             toast.error(error.message)
         }
     }
 
     useEffect(() => {
-        fetchProduct()
-    }, [isDoneCreatingProduct])
+        fetchPackage()
+    }, [isDoneCreatingPackage])
 
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-            <h1 className="font-bold text-xl tracking-wide">Produk</h1>
+            <h1 className="font-bold text-xl tracking-wide">Paket</h1>
             <div className="flex flex-wrap gap-3 mt-3 sm:mt-0">
-              <CreateProduct setIsDoneCreatingProduct={setIsDoneCreatingProduct} />
+              <CreatePackage setIsDoneCreatingPackage={setIsDoneCreatingPackage} />
             </div>
           </div>
     
@@ -44,14 +46,18 @@ const page = () => {
                   <TableHead>No</TableHead>
                   <TableHead>Nama</TableHead>
                   <TableHead>Harga</TableHead>
+                  <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products?.map((product, index) => (
-                  <TableRow key={product.id}>
+                {packages?.map((pkg, index) => (
+                  <TableRow key={pkg.id}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.price}</TableCell>
+                    <TableCell>{pkg.name}</TableCell>
+                    <TableCell>Rp{formatPrice({value: pkg.price.toString()})}</TableCell>
+                    <TableCell>
+                      <SaveProductPackage packageId={pkg.id!} />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

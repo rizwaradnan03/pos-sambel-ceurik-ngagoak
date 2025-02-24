@@ -9,43 +9,46 @@ import toast from 'react-hot-toast'
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from 'next/navigation'
 
-// export const metadata = UseMetaData({ title: "Login", description: "Halaman Deskripsi" })
-
-const page = () => {
-    const [email, setEmail] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
-    const [callbackUrl, setCallbackUrl] = useState<string>("/cashier");
+const Page = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [callbackUrl, setCallbackUrl] = useState("/cashier");
     
-    const searchParams = useSearchParams()
+    const searchParams = useSearchParams();
     const router = useRouter();
 
     useEffect(() => {
-        const urlCallback = searchParams.get("callbackUrl")
-        if(urlCallback){
-            setCallbackUrl(urlCallback)
+        const urlCallback = searchParams.get("callbackUrl");
+        if (urlCallback) {
+            setCallbackUrl(urlCallback);
         }
-    }, [searchParams])
+    }, [searchParams]);
 
     const handleLogin = async () => {
-        if(!email || !password){
-            toast.error("Email / Password Dibutuhkan!")
-            return
+        if (!email || !password) {
+            toast.error("Email / Password Dibutuhkan!");
+            return;
         }
 
         try {
-            await signIn("credentials", {
+            const login = await signIn("credentials", {
                 redirect: false,
-                email: email,
-                password: password,
-                callbackUrl
-            })
+                email,
+                password,
+                callbackUrl,
+            });
 
-            toast.success("Berhasil Login!")
-            router.push(callbackUrl)
+            if (login?.error) {
+                toast.error("Gagal Login! Periksa email dan password.");
+                return;
+            }
+            toast.success("Berhasil Login!");
+
+            router.push(callbackUrl);
         } catch (error) {
-            toast.error("Gagal Login!")
+            toast.error("Terjadi kesalahan saat login!");
         }
-    }
+    };
 
     return (
         <div className='flex justify-center items-center min-h-screen'>
@@ -64,11 +67,11 @@ const page = () => {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button className='w-full' onClick={() => handleLogin()}>Submit</Button>
+                    <Button className='w-full' onClick={handleLogin}>Submit</Button>
                 </CardFooter>
             </Card>
         </div>
-    )
-}
+    );
+};
 
-export default page
+export default Page;

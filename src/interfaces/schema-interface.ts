@@ -1,7 +1,7 @@
-interface ICommon {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
+export interface ICommon {
+    id?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 // ENUMS
@@ -32,6 +32,17 @@ export interface ISProduct extends ICommon {
     ProductCategory?: ISProductCategory[];
     ProductIngredient?: ISProductIngredient[];
     OrderProduct?: ISOrderProduct[];
+}
+
+export interface ISPackage extends ICommon {
+    name: string;
+    image: string;
+    price: number;
+}
+
+export interface ISPackageCategory extends ICommon {
+    categoryId: string;
+    packageId: string;
 }
 
 export interface ISProductCategory extends ICommon {

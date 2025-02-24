@@ -29,11 +29,11 @@ enum PaymentTypeEnum {
 
 // ### USERS ###
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      RoleEnum
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  role     RoleEnum
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -41,15 +41,22 @@ model User {
   @@map("users")
 }
 
+enum CategoryEnum {
+  PRODUCT
+  PACKAGE
+}
+
 // ### CATEGORIES ###
 model Category {
   id    String @id @default(uuid())
   title String
+  category CategoryEnum
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   ProductCategory ProductCategory[]
+  PackageCategory PackageCategory[]
 
   @@map("categories")
 }
@@ -67,8 +74,53 @@ model Product {
   ProductCategory   ProductCategory[]
   ProductIngredient ProductIngredient[]
   OrderProduct      OrderProduct[]
+  PackageItem       PackageItem[]
 
   @@map("products")
+}
+
+model Package {
+  id    String  @id @default(uuid())
+  name  String
+  image String?
+  price Decimal
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  PackageItem     PackageItem[]
+  PackageCategory PackageCategory[]
+  OrderPackage    OrderPackage[]
+
+  @@map("packages")
+}
+
+model PackageCategory {
+  id         String  @id @default(uuid())
+  categoryId String? @map("category_id")
+  packageId  String? @map("package_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Category Category? @relation(fields: [categoryId], references: [id])
+  Package  Package?  @relation(fields: [packageId], references: [id])
+
+  @@map("package_categories")
+}
+
+model PackageItem {
+  id        String  @id @default(uuid())
+  packageId String? @map("package_id")
+  productId String? @map("product_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Package Package? @relation(fields: [packageId], references: [id])
+  Product Product? @relation(fields: [productId], references: [id])
+
+  @@map("package_items")
 }
 
 model ProductCategory {
@@ -87,11 +139,11 @@ model ProductCategory {
 
 // ### INGREDIENTS ###
 model Ingredient {
-  id            String           @id @default(uuid())
-  name          String
-  stock         Decimal
-  unitOfMeasure UnitOfMeasureEnum
-  avgCostPerUnit Decimal @default(0)
+  id             String            @id @default(uuid())
+  name           String
+  stock          Decimal
+  unitOfMeasure  UnitOfMeasureEnum
+  avgCostPerUnit Decimal           @default(0)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -115,7 +167,7 @@ model IngredientPurchase {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  Ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  Ingredient Ingredient? @relation(fields: [ingredientId], references: [id])
 
   @@map("ingredient_purchases")
 }
@@ -147,7 +199,11 @@ model ProductIngredient {
   @@map("product_ingredients")
 }
 
-// ### ORDERS & TRANSACTIONS ###
+enum OrderStatusEnum {
+  DONE
+  ON_PROGRESS
+}
+
 model Order {
   id          String          @id @default(uuid())
   customer    String?
@@ -156,11 +212,14 @@ model Order {
   totalCost   Decimal
   profit      Decimal
 
+  orderStatus OrderStatusEnum @default(ON_PROGRESS) @map("order_status")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   OrderProduct OrderProduct[]
   LogOrder     LogOrder[]
+  OrderPackage OrderPackage[]
 
   @@map("orders")
 }
@@ -180,6 +239,20 @@ model OrderProduct {
   @@map("order_products")
 }
 
+model OrderPackage {
+  id        String  @id @default(uuid())
+  orderId   String? @map("order_id")
+  packageId String? @map("package_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Order   Order?   @relation(fields: [orderId], references: [id])
+  Package Package? @relation(fields: [packageId], references: [id])
+
+  @@map("order_packages")
+}
+
 model LogOrder {
   id          String  @id @default(uuid())
   orderId     String? @map("order_id")
@@ -193,7 +266,6 @@ model LogOrder {
   @@map("log_orders")
 }
 
-// ### EXPENSES (BIAYA OPERASIONAL) ### 
 model Expense {
   id          String  @id @default(uuid())
   name        String

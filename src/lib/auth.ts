@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
           role: user.role,
         }
 
-        console.log('payload return ', payload)
+        // console.log('payload return ', payload)
 
         return payload
       },
@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.role = user.role;
       }
-      console.log("Token JWT:", token);
+      // console.log("Token JWT:", token);
       return token;
     },
     async session({ session, token }: {session: any, token: any}) {
@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
         session.email = token.email;
         session.role = token.role;
       }
-      console.log("Session aktif:", session);
+      // console.log("Session aktif:", session);
       return session;
     },
   },

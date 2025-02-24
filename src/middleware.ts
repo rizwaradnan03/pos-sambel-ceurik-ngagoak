@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
     secret: process.env.NEXT_AUTH_SECRET,
   });
 
-  console.log("ada token ? ", token )
+  // console.log("ada token ? ", token )
 
   if (!token) {
     let url = new URL("/auth/login/", req.url);
