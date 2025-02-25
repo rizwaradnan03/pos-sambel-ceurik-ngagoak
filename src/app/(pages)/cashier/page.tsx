@@ -21,6 +21,7 @@ import { UseFetchFindManyPackage } from "@/hooks/api/package/findMany"
 import { UseFetchFindManyPackageByCategoryId } from "@/hooks/api/package/findManyByCategoryId"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { UseFetchFindManyOnProgressOrder } from "@/hooks/api/order/findManyOnProgress"
+import CashierDonePay from "@/components/dialog/pay/cashier-done-pay"
 
 export default function ResponsiveCashierPage() {
   const [selectedCategories, setSelectedCategories] = useState<ISCategory>({ id: "all", title: "Semua" })
@@ -32,6 +33,7 @@ export default function ResponsiveCashierPage() {
   const [onProgressOrder, setOnProgressOrder] = useState<ISOrder[] | undefined>(undefined)
 
   const [isDoneCreatingOrder, setIsDoneCreatingOrder] = useState<boolean>(false)
+  const [isOrderDonePay,setIsOrderDonePay] = useState<boolean>(false)
 
   const fetchFilteredProduct = async () => {
     try {
@@ -160,8 +162,8 @@ export default function ResponsiveCashierPage() {
   }
 
   const handleAfterCreatingOrder = async () => {
-
-
+    fetchOnProgressOrder()
+    setCart([])
     setIsDoneCreatingOrder(false)
   }
 
@@ -170,6 +172,12 @@ export default function ResponsiveCashierPage() {
       handleAfterCreatingOrder()
     }
   }, [isDoneCreatingOrder])
+
+  useEffect(() => {
+    if(isOrderDonePay == true){
+      fetchOnProgressOrder()
+    }
+  }, [isOrderDonePay])
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gradient-to-br from-red-50 to-red-100">
@@ -260,6 +268,7 @@ export default function ResponsiveCashierPage() {
                 <TableHead>No</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Total Bayar</TableHead>
+                <TableHead>Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -268,6 +277,7 @@ export default function ResponsiveCashierPage() {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{order.customer}</TableCell>
                   <TableCell>{order.totalPrice}</TableCell>
+                  <TableCell><CashierDonePay setIsOrderDonePay={setIsOrderDonePay} orderId={order.id as string} /></TableCell>
                 </TableRow>
               ))}
             </TableBody>

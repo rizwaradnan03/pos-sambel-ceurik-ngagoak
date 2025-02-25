@@ -1,3 +1,4 @@
+import Receipt from '@/components/receipt'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -6,8 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { UseCreateOrder } from '@/hooks/api/order/create'
 import { IFCartItem, IFOrder } from '@/interfaces/form-interface'
 import { PaymentTypeEnum } from '@/interfaces/schema-interface'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
+import {useReactToPrint} from "react-to-print";
 
 const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: number, cart: IFCartItem[], setIsDoneCreatingOrder: (value: boolean) => void }) => {
     const [name, setName] = useState<string | undefined>(undefined)
@@ -21,6 +23,11 @@ const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: 
             toast.error("Keranjang pesanan harus terisi terlebih dahulu!")
         }
     }, [isCashierPayDialogOpen])
+
+    const printRef = useRef<HTMLDivElement | null>(null)
+    const handlePrint = useReactToPrint({
+        contentRef: printRef
+    })
 
     const handleCreateOrder = async () => {
         console.log("isi cart ", cart)
@@ -37,17 +44,25 @@ const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: 
                 totalPrice: Number(totalPrice)
             } as IFOrder
 
-            const createOrder = UseCreateOrder({data: payload})
+            const createOrder = await UseCreateOrder({data: payload})
+            if(createOrder){
+                toast.success("Berhasil membuat pesanan!")
+                setIsCashierPayDialogOpen(false)
+                setIsDoneCreatingOrder(true)
+    
+                setTimeout(() => {
+                    handlePrint()
+                }, 500)
 
-            toast.success("Berhasil membuat pesanan!")
-            setIsCashierPayDialogOpen(false)
-            setIsDoneCreatingOrder(true)
+            }
+
         } catch (error: any) {
             toast.error(error.message)
         }
     }
 
     return (
+        <>
         <Dialog onOpenChange={setIsCashierPayDialogOpen} open={isCashierPayDialogOpen}>
             <DialogTrigger><Button className='w-full text-md'>Bayar Sekarang</Button></DialogTrigger>
             <DialogContent>
@@ -95,6 +110,11 @@ const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: 
                 </div>
             </DialogContent>
         </Dialog>
+        <div className="hidden">
+                <Receipt ref={printRef} order={{ customer: name, cart, totalPrice }} />
+            </div>
+        </>
+
     )
 }
 

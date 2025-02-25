@@ -10,6 +10,7 @@ export const UseCreateOrder = async ({data}: {data: IFOrder}) => {
 
         return create.data
     } catch (error: any) {
-        throw new Error(error)
+        console.log("bentuk error s", error)
+        throw error
     }
 }
