@@ -42,10 +42,12 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
             setIsDoneCreatingProduct(true)
             setIsDialogCreateProductOpen(false)
             toast.success("Berhasil menambahkan data produk!")
+
+            setName(undefined)
+            setImage(undefined)
+            setPrice(undefined)
         } catch (error: any) {
             toast.error(error.message)
-        } finally {
-            setIsDoneCreatingProduct(false)
         }
     }
 

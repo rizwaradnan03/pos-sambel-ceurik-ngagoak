@@ -8,6 +8,8 @@ export interface ICommon {
 export type RoleEnum = "ADMIN" | "CASHIER" | "INVENTORY" | "ANALYTICS";
 export type UnitOfMeasureEnum = "G" | "ML" | "PCS";
 export type PaymentTypeEnum = "CASH" | "CARD" | "TRANSFER";
+export type OrderStatusEnum = "DONE" | "ON_PROGRESS";
+export type CategoryEnum = "PRODUCT" | "PACKAGE";
 
 // USERS
 export interface ISUser extends ICommon {
@@ -20,7 +22,9 @@ export interface ISUser extends ICommon {
 // CATEGORIES
 export interface ISCategory extends ICommon {
     title: string;
+    category?: CategoryEnum;
     ProductCategory?: ISProductCategory[];
+    PackageCategory?: ISPackageCategory[];
 }
 
 // PRODUCTS
@@ -28,21 +32,35 @@ export interface ISProduct extends ICommon {
     name: string;
     image?: string;
     price: number;
-    
+
     ProductCategory?: ISProductCategory[];
     ProductIngredient?: ISProductIngredient[];
     OrderProduct?: ISOrderProduct[];
+    PackageItem?: ISPackageItem[];
 }
 
 export interface ISPackage extends ICommon {
     name: string;
-    image: string;
+    image?: string;
     price: number;
+
+    PackageItem?: ISPackageItem[];
+    PackageCategory?: ISPackageCategory[];
+    OrderPackage?: ISOrderPackage[];
 }
 
 export interface ISPackageCategory extends ICommon {
     categoryId: string;
     packageId: string;
+    Category?: ISCategory;
+    Package?: ISPackage;
+}
+
+export interface ISPackageItem extends ICommon {
+    packageId: string;
+    productId: string;
+    Package?: ISPackage;
+    Product?: ISProduct;
 }
 
 export interface ISProductCategory extends ICommon {
@@ -58,7 +76,7 @@ export interface ISIngredient extends ICommon {
     stock: number;
     unitOfMeasure: UnitOfMeasureEnum;
     avgCostPerUnit: number;
-    
+
     ProductIngredient?: ISProductIngredient[];
     LogIngredient?: ISLogIngredient[];
     IngredientPurchase?: ISIngredientPurchase[];
@@ -96,9 +114,11 @@ export interface ISOrder extends ICommon {
     totalPrice: number;
     totalCost: number;
     profit: number;
+    orderStatus: OrderStatusEnum;
 
     OrderProduct?: ISOrderProduct[];
     LogOrder?: ISLogOrder[];
+    OrderPackage?: ISOrderPackage[];
 }
 
 export interface ISOrderProduct extends ICommon {
@@ -108,6 +128,14 @@ export interface ISOrderProduct extends ICommon {
 
     Order?: ISOrder;
     Product?: ISProduct;
+}
+
+export interface ISOrderPackage extends ICommon {
+    orderId: string;
+    packageId: string;
+
+    Order?: ISOrder;
+    Package?: ISPackage;
 }
 
 export interface ISLogOrder extends ICommon {

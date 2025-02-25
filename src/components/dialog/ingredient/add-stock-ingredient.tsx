@@ -63,7 +63,7 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tambah Bahan Baku</DialogTitle>
+          <DialogTitle>Tambah Stok Bahan Baku</DialogTitle>
         </DialogHeader>
         <div className='flex flex-col gap-2'>
           <Label>Bahan</Label>

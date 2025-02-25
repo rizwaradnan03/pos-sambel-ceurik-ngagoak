@@ -4,20 +4,22 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest){
     try {
         const {searchParams} = new URL(req.url)
-        const categoryId = searchParams.get("category_id")
+        const productId = searchParams.get("product_id")
 
-        const data = await prisma.product.findMany({
+        const data = await prisma.ingredient.findMany({
             where: {
-                ProductCategory: {
-                    some: {
-                        categoryId: categoryId
-                    }
-                }
+                NOT: {
+                    ProductIngredient: {
+                        some: {
+                            productId: productId,
+                        },
+                    },
+                },
             },
-        })
+        });
 
         return NextResponse.json({data: data})
     } catch (error) {
         return NextResponse.json({ error: (error as Error).message }, { status: 500 });
-    }   
+    }
 }

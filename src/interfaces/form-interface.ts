@@ -1,5 +1,5 @@
 import { Option } from "@/components/ui/multiple-selector";
-import { UnitOfMeasureEnum } from "./schema-interface";
+import { CategoryEnum, PaymentTypeEnum, UnitOfMeasureEnum } from "./schema-interface";
 
 export interface IFIngredient {
     name: string;
@@ -20,6 +20,12 @@ export interface IFProduct {
     image?: string;
 }
 
+export interface IFProductIngredient {
+    dose: number;
+    productId: string;
+    ingredientId: string;
+}
+
 export interface IFPackage {
     name: string;
     price: number;
@@ -28,6 +34,7 @@ export interface IFPackage {
 
 export interface IFCategory {
     title: string;
+    category: CategoryEnum
 }
 
 export interface IFProductCategory {
@@ -44,5 +51,13 @@ export interface IFCartItem {
   id: string;
   name: string;
   price: number;
-  quantity: number
+  quantity: number;
+  category: "PRODUCT" | "PACKAGE"
+}
+
+export interface IFOrder {
+    customer: string;
+    totalPrice: number;
+    paymentType: PaymentTypeEnum;
+    cart: IFCartItem[];
 }

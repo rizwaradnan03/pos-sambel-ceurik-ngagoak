@@ -4,16 +4,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest){
     try {
         const {searchParams} = new URL(req.url)
-        const categoryId = searchParams.get("category_id")
+        const productId = searchParams.get("product_id")
 
-        const data = await prisma.product.findMany({
+        const data = await prisma.productIngredient.findMany({
             where: {
-                ProductCategory: {
-                    some: {
-                        categoryId: categoryId
-                    }
-                }
+                productId: productId
             },
+            include: {
+                Product: true,
+                Ingredient: true
+            }
         })
 
         return NextResponse.json({data: data})

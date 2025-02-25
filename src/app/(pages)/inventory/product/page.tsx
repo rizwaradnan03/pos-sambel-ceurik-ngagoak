@@ -1,8 +1,10 @@
 "use client"
 
 import CreateProduct from '@/components/dialog/product/create-product'
+import ProductIngredient from '@/components/dialog/product/product-ingredient'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany'
+import { UseFetch } from '@/hooks/use-fetch'
 import { ISProduct } from '@/interfaces/schema-interface'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -12,19 +14,9 @@ const page = () => {
 
     const [isDoneCreatingProduct, setIsDoneCreatingProduct] = useState<boolean>(false)
 
-    const fetchProduct = async () => {
-        try {
-            const fetch = await UseFetchFindManyProduct()
-
-            setProducts(fetch.data)
-        } catch (error: any) {
-            toast.error(error.message)
-        }
-    }
-
-    useEffect(() => {
-        fetchProduct()
-    }, [isDoneCreatingProduct])
+  const {data: dataProduct} = UseFetch<ISProduct[]>({key: 'inventoryProduct', dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingProduct, stateSetter: setIsDoneCreatingProduct}], apiFunction: async() => {
+    return await UseFetchFindManyProduct()
+  }})
 
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
@@ -44,14 +36,18 @@ const page = () => {
                   <TableHead>No</TableHead>
                   <TableHead>Nama</TableHead>
                   <TableHead>Harga</TableHead>
+                  <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products?.map((product, index) => (
+                {dataProduct?.map((product, index) => (
                   <TableRow key={product.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.price}</TableCell>
+                    <TableCell>
+                      <ProductIngredient productId={product.id as string} />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

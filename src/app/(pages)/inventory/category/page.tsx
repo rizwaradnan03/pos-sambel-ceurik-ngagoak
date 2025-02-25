@@ -13,7 +13,6 @@ const page = () => {
 
     const {data: dataCategories} = UseFetch<ISCategory[]>({key: "inventoryCategories", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingCategory, stateSetter: setIsDoneCreatingCategory}], apiFunction: async () => {
         let data: ISCategory[] = await UseFetchFindManyCategory()
-        data.unshift({id: "all", title: "Semua"} as ISCategory)
 
         return data
     }})
@@ -37,6 +36,7 @@ const page = () => {
                 <TableRow>
                   <TableHead>No</TableHead>
                   <TableHead>Judul</TableHead>
+                  <TableHead>Jenis</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -44,6 +44,7 @@ const page = () => {
                   <TableRow key={category.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{category.title}</TableCell>
+                    <TableCell>{category.category}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
