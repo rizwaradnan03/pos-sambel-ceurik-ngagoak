@@ -46,18 +46,16 @@ const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: 
 
             const createOrder = await UseCreateOrder({data: payload})
             if(createOrder){
-                toast.success("Berhasil membuat pesanan!")
-                setIsCashierPayDialogOpen(false)
-                setIsDoneCreatingOrder(true)
-    
                 setTimeout(() => {
                     handlePrint()
                 }, 500)
-
+                toast.success("Berhasil membuat pesanan!")
+                setIsCashierPayDialogOpen(false)
+                setIsDoneCreatingOrder(true)
             }
-
         } catch (error: any) {
-            toast.error(error.message)
+            console.log("errorkontol ", error)
+            toast.error(error.response.data.message)
         }
     }
 
@@ -69,26 +67,6 @@ const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: 
                 <DialogHeader>
                     <DialogTitle>Bayar</DialogTitle>
                 </DialogHeader>
-                {/* <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>No</TableHead>
-                            <TableHead>Nama</TableHead>
-                            <TableHead>Jumlah</TableHead>
-                            <TableHead>Harga</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {cart.map((item, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell>{item.quantity}</TableCell>
-                                <TableCell>{formatPrice({value: item.price.toString()})}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table> */}
                 <div className='flex flex-col gap-2'>
                     <Label>Nama Pembeli</Label>
                     <Input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='contoh : Akmal' />
