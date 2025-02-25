@@ -45,8 +45,6 @@ const CreatePackage = ({ setIsDoneCreatingPackage }: { setIsDoneCreatingPackage:
             toast.success("Berhasil menambahkan data paket!")
         } catch (error: any) {
             toast.error(error.message)
-        } finally {
-            setIsDoneCreatingPackage(false)
         }
     }
 

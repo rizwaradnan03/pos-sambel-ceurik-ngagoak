@@ -46,9 +46,9 @@ const CashierPay = ({ totalPrice, cart, setIsDoneCreatingOrder }: { totalPrice: 
 
             const createOrder = await UseCreateOrder({data: payload})
             if(createOrder){
-                setTimeout(() => {
+                // setTimeout(() => {
                     handlePrint()
-                }, 500)
+                // }, 500)
                 toast.success("Berhasil membuat pesanan!")
                 setIsCashierPayDialogOpen(false)
                 setIsDoneCreatingOrder(true)

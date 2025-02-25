@@ -38,8 +38,6 @@ const CreateIngredient = ({ setIsDoneCreating }: { setIsDoneCreating: (value: bo
             }
         } catch (error: any) {
             toast.error(error.message)
-        }finally{
-            setIsDoneCreating(false)
         }
     }
     

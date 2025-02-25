@@ -176,6 +176,7 @@ export default function ResponsiveCashierPage() {
   useEffect(() => {
     if(isOrderDonePay == true){
       fetchOnProgressOrder()
+      setIsDoneCreatingOrder(false)
     }
   }, [isOrderDonePay])
 
@@ -276,7 +277,7 @@ export default function ResponsiveCashierPage() {
                 <TableRow key={index + 1}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.totalPrice}</TableCell>
+                  <TableCell>Rp{formatPrice({value: order.totalPrice.toString()})}</TableCell>
                   <TableCell><CashierDonePay setIsOrderDonePay={setIsOrderDonePay} orderId={order.id as string} /></TableCell>
                 </TableRow>
               ))}

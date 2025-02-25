@@ -4,10 +4,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UseCreateIngredientPurchase } from '@/hooks/api/ingredient-purchase/create'
-import { UseCreateIngredient } from '@/hooks/api/ingredient/create'
 import { UseFetchFindManyIngredients } from '@/hooks/api/ingredient/findMany'
-import { IFIngredient, IFIngredientPurchase } from '@/interfaces/form-interface'
-import { ISIngredient, UnitOfMeasureEnum } from '@/interfaces/schema-interface'
+import { IFIngredientPurchase } from '@/interfaces/form-interface'
+import { ISIngredient } from '@/interfaces/schema-interface'
 import { Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -51,8 +50,6 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
 
     } catch (error: any) {
       toast.error(error.message)
-    }finally{
-      setIsDoneAddingIngredientStock(false)
     }
   }
 

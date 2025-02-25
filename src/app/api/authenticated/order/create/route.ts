@@ -1,7 +1,7 @@
 import { IFOrder } from "@/interfaces/form-interface";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client"; 
+import { Prisma } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,14 +20,14 @@ export async function POST(req: NextRequest) {
 
       for (const item of data.cart) {
         if (item.category === "PRODUCT") {
+          // Ambil semua bahan produk sekaligus untuk menghindari query berulang
           const productIngredients = await trx.productIngredient.findMany({
             where: { productId: item.id },
+            include: { Ingredient: true },
           });
 
           for (const productIngredient of productIngredients) {
-            const ingredient = await trx.ingredient.findUnique({
-              where: { id: productIngredient.ingredientId! },
-            });
+            const ingredient = productIngredient.Ingredient;
 
             if (!ingredient) {
               throw new Error(`Bahan dengan ID ${productIngredient.ingredientId} tidak ditemukan.`);
@@ -38,71 +38,78 @@ export async function POST(req: NextRequest) {
             const updatedStock = Number(ingredient.stock) - totalDoseNeeded;
 
             if (updatedStock < 0) {
-              throw new Error(`Stok bahan untuk ${item.name} tidak mencukupi! Dibutuhkan: ${totalDoseNeeded}, tersedia: ${ingredient.stock}`);
+              throw new Error(
+                `Stok bahan untuk ${item.name} tidak mencukupi! Dibutuhkan: ${totalDoseNeeded}, tersedia: ${ingredient.stock}`
+              );
             }
 
+            // Hitung total biaya bahan baku yang digunakan
             if (ingredient.avgCostPerUnit !== undefined) {
-              totalCost += Number(ingredient.avgCostPerUnit) * item.quantity;
+              totalCost += Number(ingredient.avgCostPerUnit) * totalDoseNeeded;
             }
 
+            // Update stok bahan
             await trx.ingredient.update({
               data: { stock: updatedStock },
               where: { id: ingredient.id },
             });
-
-            await trx.orderProduct.create({
-              data: {
-                orderId: createOrder.id,
-                productId: item.id,
-                quantity: item.quantity,
-              },
-            });
           }
+
+          // Simpan produk ke dalam order
+          await trx.orderProduct.create({
+            data: {
+              orderId: createOrder.id,
+              productId: item.id,
+              quantity: item.quantity,
+            },
+          });
         } else if (item.category === "PACKAGE") {
           const packageProducts = await trx.packageItem.findMany({
             where: { packageId: item.id },
-            include: { Product: true },
+            include: {
+              Product: {
+                include: {
+                  ProductIngredient: { include: { Ingredient: true } },
+                },
+              },
+            },
           });
 
           for (const packageProduct of packageProducts) {
-            const productIngredients = await trx.productIngredient.findMany({
-              where: { productId: packageProduct.Product?.id },
-              include: { Ingredient: true },
-            });
+            if (!packageProduct.Product) continue;
 
-            for (const productIngredient of productIngredients) {
+            for (const productIngredient of packageProduct.Product.ProductIngredient) {
               const ingredient = productIngredient.Ingredient;
-
-              if (!ingredient) {
-                throw new Error(`Bahan ${productIngredient.ingredientId} tidak ditemukan.`);
-              }
+              if (!ingredient) continue;
 
               // Mengurangi stok berdasarkan quantity dari package
               const totalDoseNeeded = Number(productIngredient.dose) * item.quantity;
               const updatedStock = Number(ingredient.stock) - totalDoseNeeded;
 
               if (updatedStock < 0) {
-                throw new Error(`Stok bahan untuk ${item.name} tidak mencukupi! Dibutuhkan: ${totalDoseNeeded}, tersedia: ${ingredient.stock}`);
+                throw new Error(
+                  `Stok bahan untuk ${item.name} tidak mencukupi! Dibutuhkan: ${totalDoseNeeded}, tersedia: ${ingredient.stock}`
+                );
               }
 
               if (ingredient.avgCostPerUnit !== undefined) {
-                totalCost += Number(ingredient.avgCostPerUnit) * item.quantity;
+                totalCost += Number(ingredient.avgCostPerUnit) * totalDoseNeeded;
               }
 
               await trx.ingredient.update({
                 data: { stock: updatedStock },
                 where: { id: ingredient.id },
               });
-
-              await trx.orderPackage.create({
-                data: {
-                  orderId: createOrder.id,
-                  packageId: item.id,
-                  quantity: item.quantity,
-                },
-              });
             }
           }
+
+          await trx.orderPackage.create({
+            data: {
+              orderId: createOrder.id,
+              packageId: item.id,
+              quantity: item.quantity,
+            },
+          });
         }
       }
 
@@ -123,6 +130,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
+    console.error("Error processing order:", error);
 
     return NextResponse.json(
       { message: error.message },
