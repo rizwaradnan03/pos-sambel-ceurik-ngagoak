@@ -12,6 +12,7 @@ import { UseFetchFindManyProductNotByPackageId } from '@/hooks/api/package/findM
 import { UseFetchFindManyPackageItemByPackageId } from '@/hooks/api/package-item/findManyByPackageId';
 import toast from 'react-hot-toast';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import ChangePackageQuantity from './change-package-quantity';
 
 const SaveProductPackage = ({ packageId }: { packageId: string }) => {
     const [packageItems, setPackageItems] = useState<ISPackageItem[] | undefined>(undefined)
@@ -111,6 +112,8 @@ const SaveProductPackage = ({ packageId }: { packageId: string }) => {
                         <TableRow>
                             <TableHead>No</TableHead>
                             <TableHead>Nama Produk</TableHead>
+                            <TableHead>Jumlah</TableHead>
+                            <TableHead>Ubah Jumlah</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -118,6 +121,8 @@ const SaveProductPackage = ({ packageId }: { packageId: string }) => {
                             <TableRow key={index + 1}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell>{packageItem.Product?.name}</TableCell>
+                                <TableCell>{packageItem.quantity}</TableCell>
+                                <TableCell><ChangePackageQuantity packageItemId={packageItem.id as string} /></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

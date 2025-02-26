@@ -82,8 +82,8 @@ export async function POST(req: NextRequest) {
               const ingredient = productIngredient.Ingredient;
               if (!ingredient) continue;
 
-              // Mengurangi stok berdasarkan quantity dari package
-              const totalDoseNeeded = Number(productIngredient.dose) * item.quantity;
+              // const totalDoseNeeded = Number(productIngredient.dose) * item.quantity;
+              const totalDoseNeeded = Number(productIngredient.dose) * packageProduct.quantity;
               const updatedStock = Number(ingredient.stock) - totalDoseNeeded;
 
               if (updatedStock < 0) {

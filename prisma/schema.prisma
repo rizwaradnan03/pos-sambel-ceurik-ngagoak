@@ -213,6 +213,9 @@ model Order {
   totalCost   Decimal?
   profit      Decimal?
 
+  isTaxIncluded Boolean @default(false) @map("is_tax_included")
+  taxAmount Decimal? @default(0)
+
   orderStatus OrderStatusEnum @default(ON_PROGRESS) @map("order_status")
 
   createdAt DateTime @default(now()) @map("created_at")

@@ -13,13 +13,13 @@ export async function POST(req: NextRequest) {
 
         const selectedProductIds = selectedProducts.map((product) => product.value);
 
-        for (let i = 0; i < packageItems.length; i++) {
-            if (!selectedProductIds.includes(packageItems[i].productId!)) {
-                await prisma.packageItem.delete({
-                    where: { id: packageItems[i].id }
-                });
-            }
-        }
+        // for (let i = 0; i < packageItems.length; i++) {
+        //     if (!selectedProductIds.includes(packageItems[i].productId!)) {
+        //         await prisma.packageItem.delete({
+        //             where: { id: packageItems[i].id }
+        //         });
+        //     }
+        // }
 
         for (let i = 0; i < selectedProductIds.length; i++) {
             const isFound = packageItems.some((item) => item.productId === selectedProductIds[i]);

@@ -37,6 +37,7 @@ const StockPage = () => {
               <TableHead>Nama</TableHead>
               <TableHead>Stock</TableHead>
               <TableHead>Satuan</TableHead>
+              <TableHead>Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -46,6 +47,7 @@ const StockPage = () => {
                 <TableCell>{ingredient.name}</TableCell>
                 <TableCell>{ingredient.stock}</TableCell>
                 <TableCell>{ingredient.unitOfMeasure}</TableCell>
+                {/* <TableCell><UpdateIngredient ingredientId={ingredient.id} /></TableCell> */}
               </TableRow>
             ))}
           </TableBody>

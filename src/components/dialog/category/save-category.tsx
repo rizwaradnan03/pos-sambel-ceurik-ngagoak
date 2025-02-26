@@ -105,8 +105,6 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
         }
     }
 
-    console.log("filtered items ", filteredItems[0])
-
     return (
         <Dialog onOpenChange={setIsSaveCategoryDialogOpen} open={isSaveCategoryDialogOpen}>
             <DialogTrigger asChild>
