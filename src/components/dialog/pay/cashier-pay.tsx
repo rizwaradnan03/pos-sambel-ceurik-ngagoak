@@ -50,13 +50,13 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 taxAmount: isTaxEnable ? taxAmount : 0
             } as IFOrder
             console.log("payloaddd nya ", payload)
-            // const createOrder = await UseCreateOrder({ data: payload })
-            // if (createOrder) {
-            //     handlePrint()
-            //     toast.success("Berhasil membuat pesanan!")
-            //     setIsCashierPayDialogOpen(false)
-            //     setIsDoneCreatingOrder(true)
-            // }
+            const createOrder = await UseCreateOrder({ data: payload })
+            if (createOrder) {
+                handlePrint()
+                toast.success("Berhasil membuat pesanan!")
+                setIsCashierPayDialogOpen(false)
+                setIsDoneCreatingOrder(true)
+            }
         } catch (error: any) {
             toast.error(error.response.data.message)
         }

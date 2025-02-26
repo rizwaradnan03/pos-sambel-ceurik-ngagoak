@@ -116,6 +116,8 @@ export interface ISOrder extends ICommon {
     totalCost: number;
     profit: number;
     orderStatus: OrderStatusEnum;
+    taxAmount: number;
+    isTaxIncluded: boolean
 
     OrderProduct?: ISOrderProduct[];
     LogOrder?: ISLogOrder[];

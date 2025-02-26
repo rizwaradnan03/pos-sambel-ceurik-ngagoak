@@ -130,7 +130,8 @@ export async function POST(req: NextRequest) {
           totalCost: totalCost,
           profit: profit,
           isTaxIncluded: data.isTaxEnable,
-          taxAmount: taxAmount
+          taxAmount: taxAmount,
+          totalPrice: totalPrice
         },
         where: { id: createOrder.id },
       });

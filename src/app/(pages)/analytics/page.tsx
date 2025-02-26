@@ -1,65 +1,71 @@
 "use client";
-import dynamic from "next/dynamic";
-import { useState } from "react";
-
-// Load ApexCharts secara dinamis (CSR)
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { Button } from "@/components/ui/button";
+import { UseReportByMonth } from "@/hooks/api/report/byMonth";
+import toast from "react-hot-toast";
 
 export default function AnalyticsPage() {
-  // 📊 Data Pie Chart (Penjualan berdasarkan kategori)
-  const pieChartData = {
-    series: [40, 25, 15, 20], // Jumlah order per kategori
-    labels: ["Makanan", "Minuman", "Camilan", "Paket"], // Nama kategori
-  };
+  // ✅ Fungsi untuk Download Laporan Bulanan
+  // const handleDownloadReportByMonth = async () => {
+  //   try {
+  //     const data = await UseReportByMonth(); // Mengambil data laporan dari hook
+  //     if (!data) throw new Error("Data laporan tidak ditemukan");
 
-  // 📈 Data Line Chart (Pertumbuhan penjualan per bulan)
-  const lineChartData = {
-    series: [
-      {
-        name: "Total Order",
-        data: [10, 15, 25, 40, 35, 50, 60, 55, 70, 90, 100, 120], // Total order per bulan
-      },
-    ],
-    categories: [
-      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-      "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
-    ],
+  //     // Konversi data menjadi Blob (file Excel)
+  //     const blob = new Blob([data], {
+  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //     });
+  //     // Buat URL Blob
+  //     const url = window.URL.createObjectURL(blob);
+
+  //     // Buat elemen <a> untuk download file
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.download = "Laporan_Bulanan.xlsx";
+  //     document.body.appendChild(a);
+  //     a.click();
+
+  //     // Bersihkan setelah download
+  //     document.body.removeChild(a);
+  //     window.URL.revokeObjectURL(url);
+
+  //     toast.success("Laporan berhasil diunduh!");
+  //   } catch (error: any) {
+  //     toast.error(error.message || "Terjadi kesalahan saat mengunduh laporan");
+  //   }
+  // };
+
+  const handleDownloadReportByMonth = async () => {
+    try {
+      const response = await fetch("/api/authenticated/report/by-month");
+  
+      if (!response.ok) throw new Error("Gagal mengunduh laporan");
+  
+      const blob = await response.blob();
+  
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Laporan_Bulanan.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+  
+      toast.success("Laporan berhasil diunduh!");
+    } catch (error: any) {
+      toast.error(error.message || "Terjadi kesalahan saat mengunduh laporan");
+    }
   };
+  
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">Analytics</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Pie Chart */}
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <h2 className="text-xl font-semibold mb-2">Penjualan Berdasarkan Kategori</h2>
-          <Chart
-            options={{
-              labels: pieChartData.labels,
-              chart: { type: "donut" },
-              legend: { position: "bottom" },
-            }}
-            series={pieChartData.series}
-            type="donut"
-            width="100%"
-          />
-        </div>
-
-        {/* Line Chart */}
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <h2 className="text-xl font-semibold mb-2">Pertumbuhan Order Per Bulan</h2>
-          <Chart
-            options={{
-              chart: { type: "line", zoom: { enabled: false } },
-              xaxis: { categories: lineChartData.categories },
-            }}
-            series={lineChartData.series}
-            type="line"
-            width="100%"
-          />
-        </div>
-      </div>
+      {/* Tombol Download Laporan */}
+      <Button onClick={handleDownloadReportByMonth}>
+        Download Laporan Bulanan
+      </Button>
     </div>
   );
 }
