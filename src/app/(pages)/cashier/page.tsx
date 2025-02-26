@@ -125,13 +125,13 @@ export default function ResponsiveCashierPage() {
     }
   }
 
-  useEffect(() => {
-    let price = 0
-    for (let i = 0; i < cart.length; i++) {
-      price += cart[i].price * cart[i].quantity
-    }
-    setTotalPrice(price)
-  }, [cart])
+  // useEffect(() => {
+  //   let price = 0
+  //   for (let i = 0; i < cart.length; i++) {
+  //     price += cart[i].price * cart[i].quantity
+  //   }
+  //   setTotalPrice(price)
+  // }, [cart])
 
   const handleDecrementQuantity = ({ productId }: { productId: string }) => {
     let newCart = [...cart]
@@ -307,7 +307,7 @@ export default function ResponsiveCashierPage() {
             <span className="text-xl lg:text-2xl font-bold text-red-800">Total:</span>
             <span className="text-xl lg:text-2xl font-bold text-red-600">Rp {formatPrice({ value: totalPrice.toString() })}</span>
           </div>
-          <CashierPay setIsDoneCreatingOrder={setIsDoneCreatingOrder} cart={cart} totalPrice={totalPrice} />
+          <CashierPay setTotalPrice={setTotalPrice} setIsDoneCreatingOrder={setIsDoneCreatingOrder} cart={cart} totalPrice={totalPrice} />
         </div>
       </div>
 

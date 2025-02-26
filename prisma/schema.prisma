@@ -213,8 +213,8 @@ model Order {
   totalCost   Decimal?
   profit      Decimal?
 
-  isTaxIncluded Boolean @default(false) @map("is_tax_included")
-  taxAmount Decimal? @default(0)
+  isTaxIncluded Boolean  @default(false) @map("is_tax_included")
+  taxAmount     Decimal? @default(0)
 
   orderStatus OrderStatusEnum @default(ON_PROGRESS) @map("order_status")
 
@@ -275,11 +275,43 @@ model Expense {
   id          String  @id @default(uuid())
   name        String
   amount      Decimal
-  category    String
   description String?
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("expenses")
+}
+
+enum RoleEmployeeEnum {
+  CASHIER
+  CHEF
+}
+
+model Employee {
+  id          String           @id @default(uuid())
+  name        String
+  phoneNumber String           @map("phone_number")
+  role        RoleEmployeeEnum
+  salary      Decimal
+  isActive    Boolean          @default(true)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  EmployeeSalaryPay EmployeeSalaryPay[]
+
+  @@map("employees")
+}
+
+model EmployeeSalaryPay {
+  id         String    @id @default(uuid())
+  employeeId String? @map("employee_id")
+  isPayed Boolean @default(false) @map("is_payed")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Employee   Employee? @relation(fields: [employeeId], references: [id])
+
+  @@map("employee_salary_pays")
 }

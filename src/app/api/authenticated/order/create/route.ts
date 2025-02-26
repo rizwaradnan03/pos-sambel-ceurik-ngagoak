@@ -1,7 +1,6 @@
 import { IFOrder } from "@/interfaces/form-interface";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,6 +8,7 @@ export async function POST(req: NextRequest) {
 
     const createdData = await prisma.$transaction(async (trx) => {
       let totalCost = 0;
+      let taxRate = 0.11
 
       const createOrder = await trx.order.create({
         data: {
@@ -113,11 +113,24 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      const profit = data.totalPrice - totalCost;
+      let profit
+      let taxAmount = data.taxAmount
+      let totalPrice
+
+      if(data.isTaxEnable){
+        totalPrice = data.totalPrice - data.taxAmount!
+        profit = totalPrice - totalCost
+      }else{
+        totalPrice = data.totalPrice
+        profit = totalPrice - totalCost
+      }
+      
       await trx.order.update({
         data: {
           totalCost: totalCost,
           profit: profit,
+          isTaxIncluded: data.isTaxEnable,
+          taxAmount: taxAmount
         },
         where: { id: createOrder.id },
       });

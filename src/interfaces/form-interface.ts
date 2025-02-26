@@ -62,7 +62,9 @@ export interface IFCartItem {
 
 export interface IFOrder {
     customer: string;
+    isTaxEnable: boolean;
     totalPrice: number;
+    taxAmount?: number;
     paymentType: PaymentTypeEnum;
     cart: IFCartItem[];
 }
