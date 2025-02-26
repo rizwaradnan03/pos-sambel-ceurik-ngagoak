@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UseCreateProduct } from '@/hooks/api/product/create'
 import { UseEncodeFileToBase64 } from '@/lib/base64/client'
-import { formatPrice } from '@/lib/number'
+import { formatPrice, pricedString } from '@/lib/number'
 import { Plus } from 'lucide-react'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
@@ -24,16 +24,9 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
         }
 
         try {
-            let formattedPrice = ""
-            for (let i = 0; i < price.length; i++) {
-                if (price[i] !== '.') {
-                    formattedPrice += price[i]
-                }
-            }
-
             const payload = {
                 name: name,
-                price: Number(formattedPrice),
+                price: pricedString({value: price}),
                 image: image
             }
 

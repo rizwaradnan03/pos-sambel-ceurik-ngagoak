@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
 import { ISProduct } from '@/interfaces/schema-interface'
+import { formatPrice } from '@/lib/number'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -44,7 +45,7 @@ const page = () => {
                   <TableRow key={product.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.price}</TableCell>
+                    <TableCell>Rp{formatPrice({value: product.price.toString()})}</TableCell>
                     <TableCell>
                       <ProductIngredient productId={product.id as string} />
                     </TableCell>

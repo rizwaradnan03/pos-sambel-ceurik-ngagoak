@@ -3,7 +3,7 @@ import { ApiManager } from "@/lib/api"
 
 export const UseSavePackageItem = async ({data}: {data: IFProductPackage}) => {
     try {
-        const save = await ApiManager(`/product-item/save`, {
+        const save = await ApiManager(`/package-item/save`, {
             method: 'POST',
             data: data
         })

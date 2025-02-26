@@ -1,6 +1,7 @@
 "use client";
 
 import CreateCategory from '@/components/dialog/category/create-category'
+import SaveCategory from '@/components/dialog/category/save-category';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyCategory } from '@/hooks/api/category/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
@@ -37,6 +38,7 @@ const page = () => {
                   <TableHead>No</TableHead>
                   <TableHead>Judul</TableHead>
                   <TableHead>Jenis</TableHead>
+                  <TableHead>Pendaftaran</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -45,6 +47,7 @@ const page = () => {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{category.title}</TableCell>
                     <TableCell>{category.category}</TableCell>
+                    <TableCell><SaveCategory categoryId={category.id as string} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>

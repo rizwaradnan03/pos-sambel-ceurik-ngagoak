@@ -12,20 +12,20 @@ import toast from 'react-hot-toast'
 
 const CreateIngredient = ({ setIsDoneCreating }: { setIsDoneCreating: (value: boolean) => void }) => {
     const [name, setName] = useState<string | undefined>(undefined)
-    const [stock, setStock] = useState<string | undefined>(undefined)
+    const [stock, setStock] = useState<number>(0)
     const [unitOfMeasure, setUnitOfMeasure] = useState<UnitOfMeasureEnum | undefined>(undefined)
 
     const [isDialogCreateIngredientOpen, setIsDialogCreateIngredientOpen] = useState<boolean>(false)
     
     const handleCreateIngredient = async () => {
-        if(!name || !stock || !unitOfMeasure) {
+        if(!name || !unitOfMeasure) {
             toast.error('Semua field harus diisi')
             return
         }
         try {
             const payload = {
                 name: name,
-                stock: parseInt(stock),
+                stock: stock,
                 unitOfMeasure: unitOfMeasure
             } as IFIngredient
 
@@ -55,10 +55,10 @@ const CreateIngredient = ({ setIsDoneCreating }: { setIsDoneCreating: (value: bo
                         <Label>Nama Bahan</Label>
                         <Input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='contoh : cabai' />
                     </div>
-                    <div className='flex flex-col gap-2'>
+                    {/* <div className='flex flex-col gap-2'>
                         <Label>Stok</Label>
                         <Input type='text' value={stock} onChange={(e) => setStock(e.target.value)} placeholder='contoh : 1' />
-                    </div>
+                    </div> */}
                     <div className='flex flex-col gap-2'>
                         <Label>Satuan</Label>
                         <Select value={unitOfMeasure} onValueChange={(value) => setUnitOfMeasure(value as UnitOfMeasureEnum)}>

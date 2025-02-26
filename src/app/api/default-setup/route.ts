@@ -25,6 +25,12 @@ export async function GET() {
                 role: "CASHIER",
                 password: await bcryptjs.hash("cashier", 10),
             },
+            {
+                email: "analytics@gmail.com",
+                name: "analytics Guy",
+                role: "ANALYTICS",
+                password: await bcryptjs.hash("analytics", 10),
+            },
         ]
     })
 

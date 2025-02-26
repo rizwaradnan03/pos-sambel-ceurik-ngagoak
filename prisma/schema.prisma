@@ -48,8 +48,8 @@ enum CategoryEnum {
 
 // ### CATEGORIES ###
 model Category {
-  id    String @id @default(uuid())
-  title String
+  id       String       @id @default(uuid())
+  title    String
   category CategoryEnum
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -113,6 +113,7 @@ model PackageItem {
   id        String  @id @default(uuid())
   packageId String? @map("package_id")
   productId String? @map("product_id")
+  quantity  Int     @default(1)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

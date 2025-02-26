@@ -16,7 +16,7 @@ import { UseFetchFindManyCategory } from "@/hooks/api/category/findMany"
 import { formatPrice } from "@/lib/number"
 import Image from "next/image"
 import CashierPay from "@/components/dialog/pay/cashier-pay"
-import { ICItem } from "@/interfaces/custom-interface"
+import { ICCartItem } from "@/interfaces/custom-interface"
 import { UseFetchFindManyPackage } from "@/hooks/api/package/findMany"
 import { UseFetchFindManyPackageByCategoryId } from "@/hooks/api/package/findManyByCategoryId"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -27,7 +27,7 @@ export default function ResponsiveCashierPage() {
   const [selectedCategories, setSelectedCategories] = useState<ISCategory>({ id: "all", title: "Semua" })
   const [categories, setCategories] = useState<ISCategory[] | undefined>(undefined)
   const [cart, setCart] = useState<IFCartItem[]>([])
-  const [filteredItem, setFilteredItem] = useState<ICItem[] | undefined>(undefined)
+  const [filteredItem, setFilteredItem] = useState<ICCartItem[] | undefined>(undefined)
   const [totalPrice, setTotalPrice] = useState<number>(0)
 
   const [onProgressOrder, setOnProgressOrder] = useState<ISOrder[] | undefined>(undefined)

@@ -59,6 +59,7 @@ export interface ISPackageCategory extends ICommon {
 export interface ISPackageItem extends ICommon {
     packageId: string;
     productId: string;
+    quantity: number;
     Package?: ISPackage;
     Product?: ISProduct;
 }

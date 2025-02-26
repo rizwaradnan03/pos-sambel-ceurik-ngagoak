@@ -42,6 +42,11 @@ export interface IFProductCategory {
     selectedCategories: Option[];
 }
 
+export interface IFCategorySave {
+    categoryId: string;
+    selectedItems: Option[]
+}
+
 export interface IFProductPackage {
     packageId: string;
     selectedProducts: Option[]

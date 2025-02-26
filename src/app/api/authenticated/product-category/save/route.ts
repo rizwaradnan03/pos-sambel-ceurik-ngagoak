@@ -1,5 +1,4 @@
-import { IFProduct, IFProductCategory } from "@/interfaces/form-interface";
-import { UseDecodedBase64ToFile } from "@/lib/base64/server";
+import { IFProductCategory } from "@/interfaces/form-interface";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -3,47 +3,66 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label';
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
 import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany';
-import { ISProduct } from '@/interfaces/schema-interface';
+import { ISPackageItem, ISProduct } from '@/interfaces/schema-interface';
 import { Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { IFProductPackage } from '@/interfaces/form-interface';
 import { UseSavePackageItem } from '@/hooks/api/package-item/save';
+import { UseFetchFindManyProductNotByPackageId } from '@/hooks/api/package/findManyNotByPackageId';
+import { UseFetchFindManyPackageItemByPackageId } from '@/hooks/api/package-item/findManyByPackageId';
+import toast from 'react-hot-toast';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const SaveProductPackage = ({ packageId }: { packageId: string }) => {
+    const [packageItems, setPackageItems] = useState<ISPackageItem[] | undefined>(undefined)
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [dataProduct, setDataProduct] = useState<Option[]>([]);
     const [selectedProducts, setSelectedProducts] = useState<Option[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const fetch = await UseFetchFindManyProduct();
-                const data: ISProduct[] = fetch.data;
+    const [isDoneSavingProductPackage, setIsDoneSavingProductPackage] = useState<boolean>(false)
 
-                if (!Array.isArray(data)) {
-                    throw new Error("Data fetched is not an array");
-                }
+    const fetchNotListedProduct = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const fetch = await UseFetchFindManyProductNotByPackageId({packageId: packageId});
+            const data: ISProduct[] = fetch.data;
 
-                const productOptions = data.map(product => ({
-                    label: product.name,
-                    value: product.id
-                }));
-
-                setDataProduct(productOptions);
-            } catch (err) {
-                console.error("Error fetching products:", err);
-                setError("Failed to fetch products.");
-            } finally {
-                setLoading(false);
+            if (!Array.isArray(data)) {
+                throw new Error("Data fetched is not an array");
             }
-        };
 
-        fetchProducts();
-    }, []);
+            const productOptions = data.map(product => ({
+                label: product.name,
+                value: product.id
+            }));
+
+            setDataProduct(productOptions);
+        } catch (err) {
+            console.error("Error fetching products:", err);
+            setError("Failed to fetch products.");
+        } finally {
+            setLoading(false);
+            setIsDoneSavingProductPackage(false)
+        }
+    };
+
+    const fetchPackageItem = async () => {
+        try {
+            const fetch = await UseFetchFindManyPackageItemByPackageId({packageId: packageId})
+
+            setPackageItems(fetch.data)
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
+
+    useEffect(() => {
+        fetchNotListedProduct();
+        fetchPackageItem()
+    }, [packageId, isDoneSavingProductPackage]);
 
     const handleSave = async () => {
         try {
@@ -53,7 +72,10 @@ const SaveProductPackage = ({ packageId }: { packageId: string }) => {
             } as IFProductPackage
             await UseSavePackageItem({data: payload})
 
+            toast.success("Berhasil menambahkan produk ke paket!")
+
             setIsDialogOpen(false);
+            setIsDoneSavingProductPackage(true)
         } catch (err) {
             console.error("Error saving package:", err);
         }
@@ -78,12 +100,28 @@ const SaveProductPackage = ({ packageId }: { packageId: string }) => {
                         <MultipleSelector 
                             defaultOptions={dataProduct} 
                             placeholder="Pilih Produk"
-                            selectedValues={selectedProducts}
+                            // selectedValues={selectedProducts}
                             onChange={setSelectedProducts}
                         />
                         <Button className="mt-2 w-full" onClick={handleSave}>Simpan</Button>
                     </div>
                 )}
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>No</TableHead>
+                            <TableHead>Nama Produk</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {packageItems?.map((packageItem, index) => (
+                            <TableRow key={index + 1}>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{packageItem.Product?.name}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </DialogContent>
         </Dialog>
     );

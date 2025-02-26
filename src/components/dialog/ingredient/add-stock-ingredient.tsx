@@ -7,6 +7,7 @@ import { UseCreateIngredientPurchase } from '@/hooks/api/ingredient-purchase/cre
 import { UseFetchFindManyIngredients } from '@/hooks/api/ingredient/findMany'
 import { IFIngredientPurchase } from '@/interfaces/form-interface'
 import { ISIngredient } from '@/interfaces/schema-interface'
+import { formatPrice, pricedString } from '@/lib/number'
 import { Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -34,15 +35,26 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
   }, [])
 
   const handleAddIngredientStock = async () => {
+    if(!selectedIngredient || !quantity || !totalCost){
+      toast.error("Semua field dibutuhkan!")
+      return
+    }
+
     try {
+      const pricedCost = pricedString({value: totalCost})
+
       const payload = {
         ingredientId: selectedIngredient?.id,
         quantity: Number(quantity),
-        pricePerUnit: Number(totalCost),
-        totalCost: Number(totalCost) * Number(quantity)
+        pricePerUnit: pricedCost,
+        totalCost: pricedCost * Number(quantity)
       } as IFIngredientPurchase
 
       const create = await UseCreateIngredientPurchase({data: payload})
+
+      setSelectedIngredient(undefined)
+      setQuantity(undefined)
+      setTotalCost(undefined)
 
       setIsDoneAddingIngredientStock(true)
       setIsDialogAddStockIngredientOpen(false)
@@ -73,8 +85,8 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {ingredients?.map((ingredient) => (
-                  <SelectItem key={ingredient.id} value={ingredient.id}>({ingredient.unitOfMeasure}) {ingredient.name}</SelectItem>
+                {ingredients && ingredients?.map((ingredient) => (
+                  <SelectItem key={ingredient.id} value={ingredient.id as string}>({ingredient.unitOfMeasure}) {ingredient.name}</SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
@@ -86,7 +98,7 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
         </div>
         <div className='flex flex-col gap-2'>
           <Label>Harga Pembelian</Label>
-          <Input type='text' value={totalCost} onChange={(e) => setTotalCost(e.target.value)} placeholder='10.000' />
+          <Input type='text' value={totalCost} onChange={(e) => setTotalCost(formatPrice({value: e.target.value}))} placeholder='10.000' />
         </div>
         <div>
           <Button className='w-full' onClick={() => handleAddIngredientStock()}>Submit</Button>

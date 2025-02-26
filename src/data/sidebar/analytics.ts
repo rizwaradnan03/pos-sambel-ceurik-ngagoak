@@ -6,7 +6,7 @@ const baseRole = "/analytics/";
 export const analyticsUrlItems: ISidebarItems[] = [
   {
     title: "Dashboard",
-    url: baseRole + "dashboard",
+    url: baseRole,
     icon: Home,
   },
   {

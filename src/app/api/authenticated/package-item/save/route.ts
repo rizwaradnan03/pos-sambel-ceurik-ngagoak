@@ -6,16 +6,13 @@ export async function POST(req: NextRequest) {
     try {
         const { packageId, selectedProducts }: IFProductPackage = await req.json();
 
-        // Ambil daftar produk yang sudah ada dalam packageItem
         const packageItems = await prisma.packageItem.findMany({
             where: { packageId },
             include: { Product: true }
         });
 
-        // Konversi `selectedProducts` menjadi array `productId`
         const selectedProductIds = selectedProducts.map((product) => product.value);
 
-        // Hapus produk yang tidak dipilih
         for (let i = 0; i < packageItems.length; i++) {
             if (!selectedProductIds.includes(packageItems[i].productId!)) {
                 await prisma.packageItem.delete({
@@ -24,7 +21,6 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // Tambahkan produk yang belum ada dalam packageItem
         for (let i = 0; i < selectedProductIds.length; i++) {
             const isFound = packageItems.some((item) => item.productId === selectedProductIds[i]);
 
