@@ -46,8 +46,7 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
       const payload = {
         ingredientId: selectedIngredient?.id,
         quantity: Number(quantity),
-        pricePerUnit: pricedCost,
-        totalCost: pricedCost * Number(quantity)
+        totalCost: pricedCost,
       } as IFIngredientPurchase
 
       const create = await UseCreateIngredientPurchase({data: payload})

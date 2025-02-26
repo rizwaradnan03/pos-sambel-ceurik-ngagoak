@@ -6,9 +6,12 @@ export async function POST(req: NextRequest) {
     try {
         const { quantity, totalCost, ingredientId }: IFIngredientPurchase = await req.json();
 
+        if (!quantity || !totalCost || !ingredientId) {
+            return NextResponse.json({ error: "Invalid input data" }, { status: 400 });
+        }
+        console.log("cost kontol nya berapa ", totalCost)
         const pricePerUnit = totalCost / quantity;
 
-        // Buat pembelian baru
         await prisma.ingredientPurchase.create({
             data: {
                 quantity: quantity,
@@ -18,24 +21,27 @@ export async function POST(req: NextRequest) {
             }
         });
 
-        // Ambil semua pembelian sebelumnya
-        const allPurchases = await prisma.ingredientPurchase.findMany({
-            where: { ingredientId },
+        const previousPurchases = await prisma.ingredientPurchase.findMany({
+            where: { ingredientId }
         });
 
-        // Hitung total jumlah dan total biaya
-        const totalQuantity = allPurchases.reduce((sum, p) => sum + Number(p.quantity), 0);
-        const totalCostSum = allPurchases.reduce((sum, p) => sum + Number(p.totalCost), 0);
+        let totalQuantity = 0;
+        let totalCostSum = 0;
+
+        for (const purchase of previousPurchases) {
+            totalQuantity += Number(purchase.quantity);
+            totalCostSum += Number(purchase.totalCost);
+        }
 
         // Hitung rata-rata cost per unit
-        const avgCostPerUnit = totalQuantity > 0 ? totalCostSum / totalQuantity : 0;
+        const avgCostPerUnit = totalQuantity > 0 ? totalCostSum / totalQuantity : pricePerUnit;
 
-        // Update stok & avgCostPerUnit
+        // Update stok dan avgCostPerUnit pada tabel ingredient
         const updateIngredientStock = await prisma.ingredient.update({
             where: { id: ingredientId },
             data: {
-                stock: { increment: quantity }, // Tambahkan stok otomatis
-                avgCostPerUnit: avgCostPerUnit, // Gunakan rata-rata semua pembelian
+                stock: { increment: quantity },
+                avgCostPerUnit: avgCostPerUnit,
             }
         });
 
