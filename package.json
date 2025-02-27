@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cross-env NODE_ENV=development next dev --turbopack",
+    "build": "next build && copyfiles -u 1 public/* dist/public",
+    "start": "cross-env NODE_ENV=production next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
     "exceljs": "^4.4.0",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",

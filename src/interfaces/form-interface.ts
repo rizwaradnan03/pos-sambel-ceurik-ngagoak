@@ -75,3 +75,11 @@ export interface IFExpense {
     description: string;
     createdAt: string
 }
+
+export interface IFEmployee {
+    name: string;
+    phoneNumber: string;
+    role: "CASHIER" | "CHEF";
+    salary: number;
+    isActive: boolean;
+}

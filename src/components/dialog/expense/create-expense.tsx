@@ -82,7 +82,7 @@ const CreateExpense = ({ setIsDoneCreatingExpense }: { setIsDoneCreatingExpense:
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label>Jumlah</Label>
-                        <Input type='text' value={amount} onChange={(e) => setAmount(formatPrice({value: e.target.value}))} placeholder='contoh : 12.000' />
+                        <Input type='text' value={amount} onChange={(e) => setAmount(formatPrice({value: e.target.value.toString()}))} placeholder='contoh : 12.000' />
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label>Waktu</Label>

@@ -1,10 +1,12 @@
 "use client"
 
+import CreateEmployee from '@/components/dialog/employee/create-employee'
 import CreateExpense from '@/components/dialog/expense/create-expense'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { UseFetchFindManyEmployee } from '@/hooks/api/employee/findMany'
 import { UseFetchFindManyExpenses } from '@/hooks/api/expense/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
-import { ISExpense } from '@/interfaces/schema-interface'
+import { ISEmployee, ISExpense } from '@/interfaces/schema-interface'
 import { UseFormattedDate } from '@/lib/date'
 import { formatPrice } from '@/lib/number'
 import React, { useState } from 'react'
@@ -12,19 +14,19 @@ import React, { useState } from 'react'
 const page = () => {
     // const [expenses, setExpenses] = useState<ISExpense | undefined>()
 
-    const [isDoneCreatingExpense, setIsDoneCreatingExpense] = useState<boolean>(false)
+    const [isDoneCreatingEmployee, setIsDoneCreatingEmployee] = useState<boolean>(false)
 
-    const { data: dataExpense } = UseFetch<ISExpense[]>({ key: "inventoryExpense", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingExpense, stateSetter: setIsDoneCreatingExpense}],apiFunction: async () => {
-        return await UseFetchFindManyExpenses()
+    const { data: dataEmployee } = UseFetch<ISEmployee[]>({ key: "inventoryExpense", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingEmployee, stateSetter: setIsDoneCreatingEmployee}],apiFunction: async () => {
+        return await UseFetchFindManyEmployee()
     }})
     
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <h1 className="font-bold text-xl tracking-wide">Biaya Operasional</h1>
+                <h1 className="font-bold text-xl tracking-wide">Karyawan</h1>
                 <div className="flex flex-wrap gap-3 mt-3 sm:mt-0">
-                    <CreateExpense setIsDoneCreatingExpense={setIsDoneCreatingExpense} />
+                    <CreateEmployee setIsDoneCreatingEmployee={setIsDoneCreatingEmployee} />
                 </div>
             </div>
 
@@ -34,21 +36,21 @@ const page = () => {
                 <TableRow>
                   <TableHead>No</TableHead>
                   <TableHead>Nama</TableHead>
-                  <TableHead>Harga</TableHead>
-                  <TableHead>Waktu</TableHead>
+                  <TableHead>Jabatan</TableHead>
+                  <TableHead>Nomor Telefon</TableHead>
+                  <TableHead>Gaji</TableHead>
+                  {/* <TableHead>Status Aktif</TableHead> */}
                   {/* <TableHead>Aksi</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dataExpense?.map((expense, index) => (
-                  <TableRow key={expense.id}>
+                {dataEmployee?.map((employee, index) => (
+                  <TableRow key={employee.id}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{expense.name}</TableCell>
-                    <TableCell>Rp{formatPrice({value: expense.amount.toString()})}</TableCell>
-                    <TableCell>{UseFormattedDate({dateValue: expense.createdAt?.toString()! })}</TableCell>
-                    {/* <TableCell>
-                      <SaveProductPackage packageId={pkg.id!} />
-                    </TableCell> */}
+                    <TableCell>{employee.name}</TableCell>
+                    <TableCell>{employee.role}</TableCell>
+                    <TableCell>{employee.phoneNumber}</TableCell>
+                    <TableCell>{formatPrice({value: employee.salary.toString()})}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

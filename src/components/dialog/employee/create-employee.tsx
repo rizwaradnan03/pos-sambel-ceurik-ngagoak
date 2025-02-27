@@ -1,0 +1,114 @@
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { UseCreateCategory } from '@/hooks/api/category/create'
+import { UseCreateEmployee } from '@/hooks/api/employee/create'
+import { UseCreateExpense } from '@/hooks/api/expense/create'
+import { IFCategory, IFEmployee, IFExpense } from '@/interfaces/form-interface'
+import { CategoryEnum } from '@/interfaces/schema-interface'
+import { formatPrice, pricedString } from '@/lib/number'
+import { Plus } from 'lucide-react'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
+
+const CreateEmployee = ({ setIsDoneCreatingEmployee }: { setIsDoneCreatingEmployee: (value: boolean) => void }) => {
+    const [name, setName] = useState<string | undefined>(undefined)
+    const [salary, setSalary] = useState<string | undefined>(undefined)
+    const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined)
+    const [role, setRole] = useState<string | undefined>(undefined)
+    const [isActive, setIsActive] = useState<string | undefined>(undefined)
+
+    const [isDialogCreateExpenseOpen, setIsDialogCreateExpenseOpen] = useState<boolean>(false)
+
+    const handleCreateProduct = async () => {
+        console.log('data', [name, salary, phoneNumber, role, isActive])
+
+        if (!name || !salary || !phoneNumber || !role || !isActive) {
+            toast.error('Semua field harus diisi')
+            return
+        }
+
+        try {
+            const payload = {
+                name: name,
+                salary: pricedString({ value: salary }),
+                phoneNumber: phoneNumber,
+                role: role,
+                isActive: isActive === "TRUE"
+            } as IFEmployee
+
+            await UseCreateEmployee({ data: payload })
+
+            toast.success("Berhasil menambahkan data kategori!")
+            setIsDoneCreatingEmployee(true)
+            setIsDialogCreateExpenseOpen(false)
+
+            setName(undefined)
+            setSalary(undefined)
+            setPhoneNumber(undefined)
+            setRole(undefined)
+            setIsActive(undefined)
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
+
+    return (
+        <>
+            <Dialog onOpenChange={setIsDialogCreateExpenseOpen} open={isDialogCreateExpenseOpen}>
+                <DialogTrigger asChild>
+                    <Button><Plus /> Tambah Karyawan</Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Tambah Karyawan</DialogTitle>
+                    </DialogHeader>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Nama</Label>
+                        <Input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='contoh : Rizwar' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Nomor Telepon</Label>
+                        <Input type='text' value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder='contoh : 0858******' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Jabatan</Label>
+                        <Select value={role} onValueChange={(value) => setRole(value)}>
+                            <SelectTrigger>
+                                <SelectValue placeholder={"Pilih Jabatan"} />
+                                <SelectContent>
+                                    <SelectItem value='CASHIER'>Kasir</SelectItem>
+                                    <SelectItem value='CHEF'>Chef</SelectItem>
+                                </SelectContent>
+                            </SelectTrigger>
+                        </Select>
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Gaji</Label>
+                        <Input type='text' value={salary} onChange={(e) => setSalary(formatPrice({ value: e.target.value.toString() }))} placeholder='3.000.000' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Status Aktif</Label>
+                        <Select value={isActive} onValueChange={(value) => setIsActive(value)}>
+                            <SelectTrigger>
+                                <SelectValue placeholder={"Status Aktif Karyawan"} />
+                                <SelectContent>
+                                    <SelectItem value='TRUE'>Aktif</SelectItem>
+                                    <SelectItem value='FALSE'>Tidak Aktif</SelectItem>
+                                </SelectContent>
+                            </SelectTrigger>
+                        </Select>                    
+                    </div>
+                    <div>
+                        <Button className='w-full' onClick={() => handleCreateProduct()}>Submit</Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </>
+    )
+}
+
+export default CreateEmployee

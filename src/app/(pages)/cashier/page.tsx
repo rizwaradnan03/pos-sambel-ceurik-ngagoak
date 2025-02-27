@@ -125,14 +125,6 @@ export default function ResponsiveCashierPage() {
     }
   }
 
-  // useEffect(() => {
-  //   let price = 0
-  //   for (let i = 0; i < cart.length; i++) {
-  //     price += cart[i].price * cart[i].quantity
-  //   }
-  //   setTotalPrice(price)
-  // }, [cart])
-
   const handleDecrementQuantity = ({ productId }: { productId: string }) => {
     let newCart = [...cart]
 
@@ -164,6 +156,7 @@ export default function ResponsiveCashierPage() {
   const handleAfterCreatingOrder = async () => {
     fetchOnProgressOrder()
     setCart([])
+    setTotalPrice(0)
     setIsDoneCreatingOrder(false)
   }
 
