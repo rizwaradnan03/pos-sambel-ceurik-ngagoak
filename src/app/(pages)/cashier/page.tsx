@@ -27,7 +27,7 @@ export default function ResponsiveCashierPage() {
   const [selectedCategories, setSelectedCategories] = useState<ISCategory>({ id: "all", title: "Semua" })
   const [categories, setCategories] = useState<ISCategory[] | undefined>(undefined)
   const [cart, setCart] = useState<IFCartItem[]>([])
-  const [filteredItem, setFilteredItem] = useState<ICCartItem[] | undefined>(undefined)
+  const [filteredItem, setFilteredItem] = useState<IFCartItem[] | undefined>(undefined)
   const [totalPrice, setTotalPrice] = useState<number>(0)
 
   const [onProgressOrder, setOnProgressOrder] = useState<ISOrder[] | undefined>(undefined)

@@ -55,6 +55,7 @@ export interface IFProductPackage {
 export interface IFCartItem {
   id: string;
   name: string;
+  image?: string;
   price: number;
   quantity: number;
   category: "PRODUCT" | "PACKAGE"

@@ -1,4 +1,4 @@
-import { startCronJob } from "../src/lib/cron/employee-salary.js";
+import { startCronJob } from "@/lib/cron/employee-salary";
 import express from "express";
 
 const app = express();

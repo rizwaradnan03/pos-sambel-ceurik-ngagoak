@@ -1,5 +1,5 @@
-import { dateCurrentMonth, dateCurrentYear } from "../../data/date.ts";
-import { prisma } from "../prisma.ts";
+import { dateCurrentMonth, dateCurrentYear } from "@/data/date"
+import { prisma } from "../prisma";
 import * as cron from "node-cron";
 
 // cron.schedule('0 0 28 * *', async () => {

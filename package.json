@@ -4,11 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development \"nodemon server/index.js\" next dev --turbopack",
-    "build": "next build && copyfiles -u 1 public/* dist/public",
-    "start": "cross-env NODE_ENV=production \"nodemon server/index.js\" next start",
-    "lint": "next lint"
-  },
+"dev": "cross-env NODE_ENV=development concurrently \"next dev --turbopack\" \"tsx server/index.ts\"",
+  "build": "next build && copyfiles -u 1 public/* dist/public",
+  "start": "cross-env NODE_ENV=production concurrently \"tsx server/index.ts\" \"next start\"",
+  "lint": "next lint"
+},
+
   "dependencies": {
     "@point-of-sale/receipt-printer-encoder": "^3.0.2",
     "@prisma/client": "^6.3.1",
