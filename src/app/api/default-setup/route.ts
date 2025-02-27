@@ -1,4 +1,4 @@
-import { UseErrorApiFunction } from "@/lib/error";
+// import { UseErrorApiFunction } from "@/lib/error";
 import { prisma } from "@/lib/prisma";
 import bcryptjs from "bcryptjs";
 import { NextResponse } from "next/server";
@@ -36,7 +36,7 @@ export async function GET() {
 
     return NextResponse.json({data: createManyUsers})
   } catch (error) {
-    UseErrorApiFunction({ error: error });
+    // UseErrorApiFunction({ error: error });
     return Response.json(
       { message: "Terjadi kesalahan", error },
       { status: 500 }

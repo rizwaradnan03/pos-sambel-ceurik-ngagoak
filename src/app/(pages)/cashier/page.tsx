@@ -173,6 +173,8 @@ export default function ResponsiveCashierPage() {
     }
   }, [isOrderDonePay])
 
+  // console.log("isi next pablik app urael ", process.env.NEXT_PUBLIC_APP_URL)
+
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gradient-to-br from-red-50 to-red-100">
       <div className="w-full lg:w-3/4 p-4 lg:p-6 overflow-hidden flex flex-col">
@@ -219,7 +221,10 @@ export default function ResponsiveCashierPage() {
         <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-red-800">Menu</h2>
         <ScrollArea className="flex-grow">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-            {filteredItem?.map((product) => (
+            {filteredItem?.map((product) => {
+              console.log("isi nextjs apiurale ", process.env.NEXT_PUBLIC_APP_URL + product.image!)
+              return (
+
               <Card key={product.id} className="bg-white overflow-hidden group hover:shadow-lg transition-shadow">
                 <CardContent className="p-0">
                   <div className="relative w-full h-72"> {/* Tambahkan kelas "relative" & atur tinggi */}
@@ -244,8 +249,9 @@ export default function ResponsiveCashierPage() {
                   </div>
                 </CardContent>
               </Card>
+              )
 
-            ))}
+})}
           </div>
         </ScrollArea>
       </div>

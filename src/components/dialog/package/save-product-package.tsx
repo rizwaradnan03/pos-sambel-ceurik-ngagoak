@@ -35,10 +35,12 @@ const SaveProductPackage = ({ packageId }: { packageId: string }) => {
                 throw new Error("Data fetched is not an array");
             }
 
-            const productOptions = data.map(product => ({
-                label: product.name,
-                value: product.id
-            }));
+            const productOptions = data
+                .filter(product => product.id !== undefined)
+                .map(product => ({
+                    label: product.name,
+                    value: product.id as string
+                }));
 
             setDataProduct(productOptions);
         } catch (err) {

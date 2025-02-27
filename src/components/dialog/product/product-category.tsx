@@ -38,14 +38,14 @@ const ProductCategory = ({ productId, setIsDoneUpdatingProductCategory }: {
                     if(data[i].ProductCategory){
                         let isFound = false
                         for(let j = 0;j < data[i].ProductCategory!.length; j++){
-                            if(data[i].ProductCategory[j].productId === productId){
+                            if(data[i].ProductCategory![j].productId! === productId){
                                 isFound = true
                             }
                         }
                         if(!isFound){
                             dataMap.push({
                                 label: data[i].title,
-                                value: data[i].id
+                                value: data[i].id!
                             })
                         }
                     }
