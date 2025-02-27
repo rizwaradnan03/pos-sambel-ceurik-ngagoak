@@ -68,3 +68,10 @@ export interface IFOrder {
     paymentType: PaymentTypeEnum;
     cart: IFCartItem[];
 }
+
+export interface IFExpense {
+    name: string;
+    amount: number;
+    description: string;
+    createdAt: string
+}

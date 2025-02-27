@@ -1,7 +1,7 @@
 export interface ICommon {
     id?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
 }
 
 // ENUMS
