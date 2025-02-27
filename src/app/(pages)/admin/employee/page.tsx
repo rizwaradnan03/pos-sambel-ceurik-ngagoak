@@ -1,19 +1,14 @@
 "use client"
 
 import CreateEmployee from '@/components/dialog/employee/create-employee'
-import CreateExpense from '@/components/dialog/expense/create-expense'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyEmployee } from '@/hooks/api/employee/findMany'
-import { UseFetchFindManyExpenses } from '@/hooks/api/expense/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
-import { ISEmployee, ISExpense } from '@/interfaces/schema-interface'
-import { UseFormattedDate } from '@/lib/date'
+import { ISEmployee, } from '@/interfaces/schema-interface'
 import { formatPrice } from '@/lib/number'
 import React, { useState } from 'react'
 
 const page = () => {
-    // const [expenses, setExpenses] = useState<ISExpense | undefined>()
-
     const [isDoneCreatingEmployee, setIsDoneCreatingEmployee] = useState<boolean>(false)
 
     const { data: dataEmployee } = UseFetch<ISEmployee[]>({ key: "inventoryExpense", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingEmployee, stateSetter: setIsDoneCreatingEmployee}],apiFunction: async () => {
@@ -50,7 +45,7 @@ const page = () => {
                     <TableCell>{employee.name}</TableCell>
                     <TableCell>{employee.role}</TableCell>
                     <TableCell>{employee.phoneNumber}</TableCell>
-                    <TableCell>{formatPrice({value: employee.salary.toString()})}</TableCell>
+                    <TableCell>{formatPrice({value: employee?.salary.toString()})}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

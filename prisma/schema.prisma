@@ -307,6 +307,7 @@ model Employee {
 model EmployeeSalaryPay {
   id         String    @id @default(uuid())
   employeeId String? @map("employee_id")
+  amount Decimal
   isPayed Boolean @default(false) @map("is_payed")
 
   createdAt DateTime @default(now()) @map("created_at")

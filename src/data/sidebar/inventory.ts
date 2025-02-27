@@ -30,16 +30,6 @@ export const inventoryUrlItems: ISidebarItems[] = [
     icon: Apple,
   },
   {
-    title: "Biaya Operasional",
-    url: baseRole + "expense",
-    icon: Apple,
-  },
-  {
-    title: "Karyawan",
-    url: baseRole + "employee",
-    icon: Apple,
-  },
-  {
     title: "Logout",
     type: "logout",
   },

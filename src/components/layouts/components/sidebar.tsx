@@ -11,6 +11,7 @@ import { ISidebarItems } from '@/interfaces/sidebar-interface'
 import { inventoryUrlItems } from '@/data/sidebar/inventory'
 import { analyticsUrlItems } from '@/data/sidebar/analytics'
 import Link from 'next/link'
+import { adminUrlItems } from '@/data/sidebar/admin'
 
 const Sidebar = ({ children, role }: { children: TReactNode, role: RoleEnum }) => {
     const [renderSidebar, setRenderSidebar] = useState<ISidebarItems[] | undefined>(undefined)
@@ -26,7 +27,7 @@ const Sidebar = ({ children, role }: { children: TReactNode, role: RoleEnum }) =
         } else if (role === "ANALYTICS") {
             setRenderSidebar(analyticsUrlItems)
         }else if(role === "ADMIN"){
-            setRenderSidebar(inventoryUrlItems)
+            setRenderSidebar(adminUrlItems)
         }
     }, [role])
 

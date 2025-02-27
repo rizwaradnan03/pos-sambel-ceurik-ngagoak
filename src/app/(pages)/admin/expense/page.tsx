@@ -22,7 +22,7 @@ const page = () => {
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <h1 className="font-bold text-xl tracking-wide">Biaya Operasional</h1>
+                <h1 className="font-bold text-xl tracking-wide">Biaya Operasional (Bulan Ini)</h1>
                 <div className="flex flex-wrap gap-3 mt-3 sm:mt-0">
                     <CreateExpense setIsDoneCreatingExpense={setIsDoneCreatingExpense} />
                 </div>
@@ -44,8 +44,8 @@ const page = () => {
                   <TableRow key={expense.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{expense.name}</TableCell>
-                    <TableCell>Rp{formatPrice({value: expense.amount.toString()})}</TableCell>
-                    <TableCell>{UseFormattedDate({dateValue: expense.createdAt?.toString()! })}</TableCell>
+                    <TableCell>Rp{formatPrice({value: expense.amount?.toString() ?? '0'})}</TableCell>
+                    <TableCell>{expense.createdAt ? UseFormattedDate({dateValue: expense.createdAt.toString() }) : 'N/A'}</TableCell>
                     {/* <TableCell>
                       <SaveProductPackage packageId={pkg.id!} />
                     </TableCell> */}
