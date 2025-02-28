@@ -10,8 +10,8 @@ export const analyticsUrlItems: ISidebarItems[] = [
     icon: Home,
   },
   {
-    title: "Analytics",
-    url: baseRole + "analytics",
+    title: "Laporan",
+    url: baseRole + "report",
     icon: House
   },
   {
