@@ -4,17 +4,17 @@ import { prisma } from "@/lib/prisma";
 import { ISOrder } from "@/interfaces/schema-interface";
 
 function formatPrice({ value }: { value: number }): string {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
     minimumFractionDigits: 0,
   }).format(value);
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const {month, year} = await req.json()
-    console.log("month dan year", [month, year])
+    const { month, year } = await req.json();
+    console.log("month dan year", [month, year]);
 
     const workBook = new ExcelJS.Workbook();
     const workSheetLabaRugi = workBook.addWorksheet("Laporan Laba Rugi");
@@ -40,22 +40,30 @@ export async function POST(req: NextRequest) {
       { header: "Pajak", key: "taxAmount", width: 20 },
     ];
 
+    let saleAmount = 0;
+    let taxAmount = 0;
+    let costAmount = 0;
+
     let expenseAmount = 0;
     let employeeSalaryPayAmount = 0;
+    let ingredientPurchaseAmount = 0
 
     const orders = await prisma.$queryRawUnsafe<
       { taxAmount: number; totalPrice: number; totalCost: number }[]
     >(
       `SELECT SUM(taxAmount) as taxAmount, SUM(totalCost) as totalCost, SUM(totalPrice) totalPrice FROM orders WHERE order_status = 'DONE' AND MONTH(created_at) = ${currentMonth} AND YEAR(created_at) = ${currentYear} GROUP BY totalCost, taxAmount, totalPrice`
     );
-    console.log("orders ", orders);
+    for (let i = 0; i < orders.length; i++) {
+      saleAmount += Number(orders[i].totalPrice);
+      taxAmount += Number(orders[i].taxAmount);
+      costAmount += Number(orders[i].totalCost);
+    }
 
     const expenses = await prisma.$queryRawUnsafe<
       { name: string; amount: number }[]
     >(
       `SELECT name, SUM(amount) as amount FROM expenses WHERE MONTH(created_at) = ${currentMonth} AND YEAR(created_at) = ${currentYear} GROUP BY name`
     );
-    console.log("expenses ", expenses);
     for (let i = 0; i < expenses.length; i++) {
       expenseAmount += Number(expenses[i].amount);
     }
@@ -71,39 +79,42 @@ export async function POST(req: NextRequest) {
        AND YEAR(employee_salary_pays.created_at) = ${currentYear} 
        GROUP BY employees.name`
     );
-    console.log("employee salary pays ", employeeSalaryPays);
-
     for (let i = 0; i < employeeSalaryPays.length; i++) {
       employeeSalaryPayAmount += Number(employeeSalaryPays[i].amount);
     }
 
-    const sale = Number(orders[0].totalPrice) + Number(orders[0].taxAmount);
+    const ingredientPurchases =
+      await prisma.$queryRawUnsafe<{name: string, amount: number}[]>(`SELECT ingredients.name as name, SUM(ingredient_purchases.total_cost) as amount FROM ingredient_purchases INNER JOIN ingredients ON ingredients.id = ingredient_purchases.ingredient_id WHERE MONTH(ingredient_purchases.created_at) = ${currentMonth} 
+       AND YEAR(ingredient_purchases.created_at) = ${currentYear}  GROUP BY name`);
+    for(let i = 0;i < ingredientPurchases.length;i++){
+      ingredientPurchaseAmount += Number(ingredientPurchases[i].amount)
+    }
 
     const incomeRow = workSheetLabaRugi.addRow({
       title: "Pendapatan",
-      amount: formatPrice({ value: Number(orders[0].totalPrice) - Number(orders[0].totalCost) }),
+      amount: formatPrice({ value: saleAmount - costAmount }),
     });
     incomeRow.getCell("title").font = { bold: true, size: 12 };
     incomeRow.getCell("amount").font = { bold: true, size: 12 };
 
     const saleRow = workSheetLabaRugi.addRow({
       title: "Penjualan",
-      amount: formatPrice({ value: sale }),
+      amount: formatPrice({ value: saleAmount + taxAmount }),
     });
 
     const taxRow = workSheetLabaRugi.addRow({
       title: "Pajak",
-      amount: formatPrice({ value: Number(orders[0].taxAmount) }),
+      amount: formatPrice({ value: taxAmount }),
     });
 
     const saleWithoutTaxRow = workSheetLabaRugi.addRow({
       title: "Penjualan - Pajak",
-      amount: formatPrice({ value: Number(orders[0].totalPrice) }),
+      amount: formatPrice({ value: saleAmount }),
     });
 
     const costOfGoodSoldsRow = workSheetLabaRugi.addRow({
       title: "HPP",
-      amount: formatPrice({ value: Number(orders[0].totalCost) }),
+      amount: formatPrice({ value: costAmount }),
     });
 
     workSheetLabaRugi.addRow({});
@@ -111,10 +122,24 @@ export async function POST(req: NextRequest) {
 
     const costRow = workSheetLabaRugi.addRow({
       title: "Biaya Biaya",
-      amount: formatPrice({ value: employeeSalaryPayAmount + expenseAmount }),
+      amount: formatPrice({ value: employeeSalaryPayAmount + expenseAmount + ingredientPurchaseAmount }),
     });
     costRow.getCell("title").font = { bold: true, size: 12 };
     costRow.getCell("amount").font = { bold: true, size: 12 };
+
+    if(ingredientPurchases.length > 0){
+      const ingredientPurchaseRow = workSheetLabaRugi.addRow({
+        title: "Biaya Belanja",
+        amount: formatPrice({value: ingredientPurchaseAmount})
+      })
+
+      ingredientPurchases.forEach((purchase, index) => {
+        workSheetLabaRugi.addRow({
+          title:`(${index + 1}) ${purchase.name}`,
+          amount: formatPrice({ value: Number(purchase.amount) }),
+        })
+      })
+    }
 
     if (employeeSalaryPays.length > 0) {
       const employeeSalaryPayRow = workSheetLabaRugi.addRow({
@@ -146,15 +171,13 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    workSheetLabaRugi.addRow({})
+    workSheetLabaRugi.addRow({});
 
     const profitRow = workSheetLabaRugi.addRow({
       title: "Laba (Pendapatan - Biaya Biaya)",
       amount: formatPrice({
         value:
-          Number(orders[0].totalPrice) -
-          Number(orders[0].totalCost) -
-          (employeeSalaryPayAmount + expenseAmount),
+          saleAmount - costAmount - (employeeSalaryPayAmount + expenseAmount),
       }),
     });
     profitRow.getCell("title").font = { bold: true, size: 13 };
