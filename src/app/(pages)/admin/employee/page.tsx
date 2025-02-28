@@ -45,7 +45,7 @@ const page = () => {
                     <TableCell>{employee.name}</TableCell>
                     <TableCell>{employee.role}</TableCell>
                     <TableCell>{employee.phoneNumber}</TableCell>
-                    <TableCell>{formatPrice({value: employee?.salary.toString()})}</TableCell>
+                    <TableCell>Rp{formatPrice({value: employee?.salary.toString()})}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

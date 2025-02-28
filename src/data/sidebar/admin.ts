@@ -26,7 +26,7 @@ export const adminUrlItems: ISidebarItems[] = [
   },
   {
     title: "Gaji",
-    url: baseRole + "employee",
+    url: baseRole + "employee-salary-pay",
     icon: CircleDollarSign,
   },
   {

@@ -48,8 +48,6 @@ const CreatePackage = ({ setIsDoneCreatingPackage }: { setIsDoneCreatingPackage:
         }
     }
 
-    console.log("file nya ", image)
-
     return (
         <>
             <Dialog onOpenChange={setIsDialogCreateProductOpen} open={isDialogCreateProductOpen}>

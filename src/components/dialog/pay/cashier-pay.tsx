@@ -147,7 +147,7 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 </DialogContent>
             </Dialog>
             <div className="hidden">
-                <Receipt ref={printRef} order={{ customer: name, cart, totalPrice }} />
+                <Receipt ref={printRef} order={{ customer: name, cart, totalPrice, taxAmount }} />
             </div>
         </>
 

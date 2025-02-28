@@ -1,4 +1,3 @@
-import { Option } from "@/components/ui/multiple-selector";
 import { IFCategorySave } from "@/interfaces/form-interface";
 import { ApiManager } from "@/lib/api";
 
