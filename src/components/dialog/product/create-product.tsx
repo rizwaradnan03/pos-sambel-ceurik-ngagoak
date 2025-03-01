@@ -15,6 +15,8 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
     const [name, setName] = useState<string | undefined>(undefined)
     const [price, setPrice] = useState<string | undefined>(undefined)
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
     const [isDialogCreateProductOpen, setIsDialogCreateProductOpen] = useState<boolean>(false)
 
     const handleCreateProduct = async () => {
@@ -22,6 +24,8 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
             toast.error('Semua field harus diisi')
             return
         }
+
+        setIsButtonDisabled(true)
 
         try {
             const payload = {
@@ -41,6 +45,8 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
             setPrice(undefined)
         } catch (error: any) {
             toast.error(error.message)
+        }finally{
+            setIsButtonDisabled(false)
         }
     }
 
@@ -78,7 +84,7 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
                         <Input type='text' value={price} onChange={(e) => setPrice(formatPrice({ value: e.target.value }))} placeholder='contoh : 10.000' />
                     </div>
                     <div>
-                        <Button className='w-full' onClick={() => handleCreateProduct()}>Submit</Button>
+                        <Button className='w-full' onClick={() => handleCreateProduct()} disabled={isButtonDisabled}>Submit</Button>
                     </div>
                 </DialogContent>
             </Dialog>

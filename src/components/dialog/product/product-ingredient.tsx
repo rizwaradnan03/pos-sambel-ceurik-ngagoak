@@ -23,6 +23,8 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
     const [isDoseProductDialogOpen, setIsDoseProductDialogOpen] = useState<boolean>(false)
     const [isDoneCreatingProductIngredient, setIsDoneCreatingProductIngredient] = useState<boolean>(false)
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
     const { data: dataIngredient } = UseFetch<ISIngredient[]>({
         key: 'inventoryProductIngredientIngredient', dependencies: [productId], refetchDependencies: [{stateValue: isDoneCreatingProductIngredient, stateSetter: setIsDoneCreatingProductIngredient}], apiFunction: async () => {
             return await UseFetchFindManyIngredientNotByProductId({ productId: productId })
@@ -43,6 +45,8 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
             return
         }
 
+        setIsButtonDisabled(true)
+
         try {
             const payload = {
                 productId: productId,
@@ -60,6 +64,8 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
             setDose(undefined)
         } catch (error: any) {
             toast.error(error.message)
+        }finally{
+            setIsButtonDisabled(false)
         }
     }
 
@@ -92,7 +98,7 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
                             <Input type='text' value={dose} onChange={(e) => setDose(e.target.value)} placeholder='Masukan jumlah dosis bahan untuk menjadi satu produk' />
                         </div>
                         <div>
-                            <Button className='w-full' onClick={() => handleCreateProductIngredient()}>Submit</Button>
+                            <Button className='w-full' onClick={() => handleCreateProductIngredient()} disabled={isButtonDisabled}>Submit</Button>
                         </div>
                     </div>
                     <div>

@@ -23,6 +23,8 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
     const [isSaveCategoryDialogOpen, setIsSaveCategoryDialogOpen] = useState<boolean>(false)
     const [isDoneSaveCategory,setIsDoneSaveCategory] = useState<boolean>(false)
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
     const fetchNotFilteredItem = async () => {
         try {
             const fetchProduct = await UseFetchFindManyProductNotByCategoryId({ categoryId: categoryId })
@@ -83,6 +85,8 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
 
     useEffect(() => {
         if(isDoneSaveCategory == true){
+            console.log("going to ")
+
             fetchFilteredItem()
             fetchNotFilteredItem()
             setIsDoneSaveCategory(false)
@@ -91,6 +95,8 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
 
     const handleSave = async () => {
         try {
+            setIsButtonDisabled(true)
+
             const payload = {
                 categoryId: categoryId,
                 selectedItems: selectedItem
@@ -102,6 +108,8 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
             toast.success("Berhasil menambahkan item kepada kategori!")
         } catch (error: any) {
             toast.error(error.message)
+        }finally{
+            setIsButtonDisabled(false)
         }
     }
 
@@ -123,24 +131,26 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
                             onChange={setSelectedItem}
                         />
                     ) : null}
-                    <Button className="mt-2 w-full" onClick={() => handleSave()}>Simpan</Button>
+                    <Button className="mt-2 w-full" onClick={() => handleSave()} disabled={isButtonDisabled}>Simpan</Button>
                 </div>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>No</TableHead>
-                            <TableHead>Nama Item</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredItems?.map((item, index) => (
-                            <TableRow key={index + 1}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>{item.name}</TableCell>
+                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>No</TableHead>
+                                <TableHead>Nama Item</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {filteredItems?.map((item, index) => (
+                                <TableRow key={index + 1}>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{item.name}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </DialogContent>
         </Dialog>
     )

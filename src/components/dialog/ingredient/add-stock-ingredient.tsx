@@ -20,6 +20,8 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
 
   const [isDialogAddStockIngredientOpen, setIsDialogAddStockIngredientOpen] = useState<boolean>(false)
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
   const fetchIngredient = async () => {
     try {
       const fetch = await UseFetchFindManyIngredients()
@@ -39,6 +41,8 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
       toast.error("Semua field dibutuhkan!")
       return
     }
+
+    setIsButtonDisabled(true)
 
     try {
       const pricedCost = pricedString({value: totalCost})
@@ -61,6 +65,8 @@ const AddStockIngredient = ({ setIsDoneAddingIngredientStock }: { setIsDoneAddin
 
     } catch (error: any) {
       toast.error(error.message)
+    }finally{
+      setIsButtonDisabled(false)
     }
   }
 

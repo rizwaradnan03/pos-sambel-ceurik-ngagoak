@@ -15,11 +15,15 @@ const CreateCategory = ({ setIsDoneCreatingCategory }: { setIsDoneCreatingCatego
     const [category, setCategory] = useState<CategoryEnum | undefined>(undefined)
     const [isDialogCreateProductOpen, setIsDialogCreateProductOpen] = useState<boolean>(false)
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
     const handleCreateProduct = async () => {
         if (!title) {
             toast.error('Semua field harus diisi')
             return
         }
+
+        setIsButtonDisabled(true)
 
         try {
             const payload = {
@@ -37,6 +41,8 @@ const CreateCategory = ({ setIsDoneCreatingCategory }: { setIsDoneCreatingCatego
             setCategory(undefined)
         } catch (error: any) {
             toast.error(error.message)
+        }finally{
+            setIsButtonDisabled(false)
         }
     }
 
@@ -67,7 +73,7 @@ const CreateCategory = ({ setIsDoneCreatingCategory }: { setIsDoneCreatingCatego
                         </Select>
                     </div>
                     <div>
-                        <Button className='w-full' onClick={() => handleCreateProduct()}>Submit</Button>
+                        <Button className='w-full' onClick={() => handleCreateProduct()} disabled={isButtonDisabled}>Submit</Button>
                     </div>
                 </DialogContent>
             </Dialog>

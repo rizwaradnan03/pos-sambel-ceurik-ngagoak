@@ -17,11 +17,15 @@ const CreateIngredient = ({ setIsDoneCreating }: { setIsDoneCreating: (value: bo
 
     const [isDialogCreateIngredientOpen, setIsDialogCreateIngredientOpen] = useState<boolean>(false)
     
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+
     const handleCreateIngredient = async () => {
         if(!name || !unitOfMeasure) {
             toast.error('Semua field harus diisi')
             return
         }
+        setIsButtonDisabled(true)
+
         try {
             const payload = {
                 name: name,
@@ -38,6 +42,8 @@ const CreateIngredient = ({ setIsDoneCreating }: { setIsDoneCreating: (value: bo
             }
         } catch (error: any) {
             toast.error(error.message)
+        }finally{
+            setIsButtonDisabled(false)
         }
     }
     
@@ -75,7 +81,7 @@ const CreateIngredient = ({ setIsDoneCreating }: { setIsDoneCreating: (value: bo
                         </Select>
                     </div>
                     <div>
-                        <Button className='w-full' onClick={() => handleCreateIngredient()}>Submit</Button>
+                        <Button className='w-full' onClick={() => handleCreateIngredient()} disabled={isButtonDisabled}>Submit</Button>
                     </div>
                 </DialogContent>
             </Dialog>
