@@ -12,7 +12,9 @@ import toast from 'react-hot-toast'
 const page = () => {
     const [isDoneCreatingCategory, setIsDoneCreatingCategory] = useState<boolean>(false)
 
-    const {data: dataCategories} = UseFetch<ISCategory[]>({key: "inventoryCategories", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingCategory, stateSetter: setIsDoneCreatingCategory}], apiFunction: async () => {
+    const {data: dataCategories} = UseFetch<ISCategory[]>({key: "inventoryCategories", dependencies: [], 
+      refetchDependencies: [{stateValue: isDoneCreatingCategory, stateSetter: setIsDoneCreatingCategory}], 
+      apiFunction: async () => {
         let data: ISCategory[] = await UseFetchFindManyCategory()
 
         return data
