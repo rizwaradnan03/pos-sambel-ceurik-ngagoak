@@ -293,30 +293,67 @@ enum RoleEmployeeEnum {
 }
 
 model Employee {
-  id          String           @id @default(uuid())
-  name        String
-  phoneNumber String           @map("phone_number")
-  role        RoleEmployeeEnum
-  salary      Decimal
-  isActive    Boolean          @default(true)
+  id             String           @id @default(uuid())
+  name           String
+  phoneNumber    String           @map("phone_number")
+  role           RoleEmployeeEnum
+  salaryPerDay   Decimal
+  transportPerDay Decimal
+  isActive       Boolean          @default(true)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   EmployeeSalaryPay EmployeeSalaryPay[]
+  EmployeeAttendance EmployeeAttendance[]
+  EmployeeSalarySummary EmployeeSalarySummary[]
 
   @@map("employees")
 }
 
+
+model EmployeeAttendance {
+  id          String   @id @default(uuid())
+  employeeId  String   @map("employee_id")
+  date        DateTime
+  isPresent   Boolean  @default(false) // True jika masuk, False jika tidak
+  isTransport Boolean  @default(false) // True jika dapat uang transport
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  Employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("employee_attendances")
+}
+
 model EmployeeSalaryPay {
   id         String    @id @default(uuid())
-  employeeId String? @map("employee_id")
-  amount Decimal
-  isPayed Boolean @default(false) @map("is_payed")
+  employeeId String    @map("employee_id")
+  amount     Decimal   // Total Gaji + Transportasi
+  isPayed    Boolean   @default(false) @map("is_payed")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  Employee   Employee? @relation(fields: [employeeId], references: [id])
+
+  Employee Employee @relation(fields: [employeeId], references: [id])
 
   @@map("employee_salary_pays")
+}
+
+model EmployeeSalarySummary {
+  id             String    @id @default(uuid())
+  employeeId     String    @map("employee_id")
+  month          Int       // Bulan
+  year           Int       // Tahun
+  totalSalary    Decimal   // Gaji Bersih
+  totalTransport Decimal   // Total Uang Transport
+  totalCut       Decimal   // Potongan Gaji (Jika tidak masuk)
+  isPayed        Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("employee_salary_summaries")
 }
