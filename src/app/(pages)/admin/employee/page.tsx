@@ -33,7 +33,8 @@ const page = () => {
                   <TableHead>Nama</TableHead>
                   <TableHead>Jabatan</TableHead>
                   <TableHead>Nomor Telefon</TableHead>
-                  <TableHead>Gaji</TableHead>
+                  <TableHead>Gaji (Per Hari)</TableHead>
+                  <TableHead>Transportasi (Per Hari)</TableHead>
                   {/* <TableHead>Status Aktif</TableHead> */}
                   {/* <TableHead>Aksi</TableHead> */}
                 </TableRow>
@@ -45,7 +46,8 @@ const page = () => {
                     <TableCell>{employee.name}</TableCell>
                     <TableCell>{employee.role}</TableCell>
                     <TableCell>{employee.phoneNumber}</TableCell>
-                    <TableCell>Rp{formatPrice({value: employee?.salary.toString()})}</TableCell>
+                    <TableCell>Rp{formatPrice({value: employee?.salaryPerDay.toString()})}</TableCell>
+                    <TableCell>Rp{formatPrice({value: employee?.transportPerDay.toString()})}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

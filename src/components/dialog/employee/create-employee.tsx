@@ -16,7 +16,8 @@ import toast from 'react-hot-toast'
 
 const CreateEmployee = ({ setIsDoneCreatingEmployee }: { setIsDoneCreatingEmployee: (value: boolean) => void }) => {
     const [name, setName] = useState<string | undefined>(undefined)
-    const [salary, setSalary] = useState<string | undefined>(undefined)
+    const [salaryPerDay, setSalaryPerDay] = useState<string | undefined>(undefined)
+    const [transportPerDay, setTransportPerDay] = useState<string | undefined>(undefined)
     const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined)
     const [role, setRole] = useState<string | undefined>(undefined)
     const [isActive, setIsActive] = useState<string | undefined>(undefined)
@@ -24,9 +25,9 @@ const CreateEmployee = ({ setIsDoneCreatingEmployee }: { setIsDoneCreatingEmploy
     const [isDialogCreateExpenseOpen, setIsDialogCreateExpenseOpen] = useState<boolean>(false)
 
     const handleCreateProduct = async () => {
-        console.log('data', [name, salary, phoneNumber, role, isActive])
+        console.log('data', [name, salaryPerDay, phoneNumber, role, isActive])
 
-        if (!name || !salary || !phoneNumber || !role || !isActive) {
+        if (!name || !salaryPerDay || !phoneNumber || !role || !isActive || !transportPerDay) {
             toast.error('Semua field harus diisi')
             return
         }
@@ -34,7 +35,8 @@ const CreateEmployee = ({ setIsDoneCreatingEmployee }: { setIsDoneCreatingEmploy
         try {
             const payload = {
                 name: name,
-                salary: pricedString({ value: salary }),
+                salaryPerDay: pricedString({ value: salaryPerDay }),
+                transportPerDay: pricedString({ value: transportPerDay }),
                 phoneNumber: phoneNumber,
                 role: role,
                 isActive: isActive === "TRUE"
@@ -47,7 +49,8 @@ const CreateEmployee = ({ setIsDoneCreatingEmployee }: { setIsDoneCreatingEmploy
             setIsDialogCreateExpenseOpen(false)
 
             setName(undefined)
-            setSalary(undefined)
+            setSalaryPerDay(undefined)
+            setTransportPerDay(undefined)
             setPhoneNumber(undefined)
             setRole(undefined)
             setIsActive(undefined)
@@ -87,8 +90,12 @@ const CreateEmployee = ({ setIsDoneCreatingEmployee }: { setIsDoneCreatingEmploy
                         </Select>
                     </div>
                     <div className='flex flex-col gap-2'>
-                        <Label>Gaji</Label>
-                        <Input type='text' value={salary} onChange={(e) => setSalary(formatPrice({ value: e.target.value.toString() }))} placeholder='3.000.000' />
+                        <Label>Gaji Per Hari</Label>
+                        <Input type='text' value={salaryPerDay} onChange={(e) => setSalaryPerDay(formatPrice({ value: e.target.value.toString() }))} placeholder='100.000' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Transportasi Per Hari</Label>
+                        <Input type='text' value={transportPerDay} onChange={(e) => setTransportPerDay(formatPrice({ value: e.target.value.toString() }))} placeholder='25.000' />
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label>Status Aktif</Label>

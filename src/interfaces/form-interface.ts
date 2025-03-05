@@ -81,6 +81,7 @@ export interface IFEmployee {
     name: string;
     phoneNumber: string;
     role: "CASHIER" | "CHEF";
-    salary: number;
+    salaryPerDay: number;
     isActive: boolean;
+    transportPerDay: number;
 }

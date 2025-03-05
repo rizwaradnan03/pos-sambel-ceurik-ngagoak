@@ -1,18 +1,18 @@
-import { IFEmployee, IFProduct, IFProductIngredient } from "@/interfaces/form-interface";
-import { UseDecodedBase64ToFile } from "@/lib/base64/server";
+import { IFEmployee } from "@/interfaces/form-interface";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const { name, phoneNumber, salary, isActive, role }: IFEmployee = await req.json();
+        const { name, phoneNumber, salaryPerDay, transportPerDay, isActive, role }: IFEmployee = await req.json();
 
 
         const create = await prisma.employee.create({
             data: {
                 name: name,
                 phoneNumber: phoneNumber,
-                salary: salary,
+                salaryPerDay: salaryPerDay,
+                transportPerDay: transportPerDay,
                 isActive: isActive,
                 role: role
             }
