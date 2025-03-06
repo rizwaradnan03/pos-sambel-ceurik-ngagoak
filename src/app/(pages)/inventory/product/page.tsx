@@ -1,21 +1,20 @@
 "use client"
 
 import CreateProduct from '@/components/dialog/product/create-product'
+import DeleteProduct from '@/components/dialog/product/delete-product'
 import ProductIngredient from '@/components/dialog/product/product-ingredient'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyProduct } from '@/hooks/api/product/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
 import { ISProduct } from '@/interfaces/schema-interface'
 import { formatPrice } from '@/lib/number'
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import React, {useState } from 'react'
 
 const page = () => {
-    const [products, setProducts] = useState<ISProduct[] | undefined>(undefined)
-
     const [isDoneCreatingProduct, setIsDoneCreatingProduct] = useState<boolean>(false)
+    const [isDoneDeletingProduct, setIsDoneDeletingProduct] = useState<boolean>(false)
 
-  const {data: dataProduct} = UseFetch<ISProduct[]>({key: 'inventoryProduct', dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingProduct, stateSetter: setIsDoneCreatingProduct}], apiFunction: async() => {
+  const {data: dataProduct} = UseFetch<ISProduct[]>({key: 'inventoryProduct', dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingProduct, stateSetter: setIsDoneCreatingProduct}, {stateValue: isDoneDeletingProduct,stateSetter: setIsDoneDeletingProduct}], apiFunction: async() => {
     return await UseFetchFindManyProduct()
   }})
 
@@ -37,6 +36,7 @@ const page = () => {
                   <TableHead>No</TableHead>
                   <TableHead>Nama</TableHead>
                   <TableHead>Harga</TableHead>
+                  <TableHead>Dosis</TableHead>
                   <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -49,6 +49,7 @@ const page = () => {
                     <TableCell>
                       <ProductIngredient productId={product.id as string} />
                     </TableCell>
+                    <TableCell><DeleteProduct productId={product.id as string} setIsDoneDeletingProduct={setIsDoneDeletingProduct} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>

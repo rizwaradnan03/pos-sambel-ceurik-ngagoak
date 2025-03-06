@@ -1,5 +1,6 @@
 "use client"
 
+import AttendanceEmployee from '@/components/dialog/employee/attendance-employee'
 import CreateEmployee from '@/components/dialog/employee/create-employee'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyEmployee } from '@/hooks/api/employee/findMany'
@@ -11,7 +12,7 @@ import React, { useState } from 'react'
 const page = () => {
     const [isDoneCreatingEmployee, setIsDoneCreatingEmployee] = useState<boolean>(false)
 
-    const { data: dataEmployee } = UseFetch<ISEmployee[]>({ key: "inventoryExpense", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingEmployee, stateSetter: setIsDoneCreatingEmployee}],apiFunction: async () => {
+    const { data: dataEmployee } = UseFetch<ISEmployee[]>({ key: "adminEmployee", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingEmployee, stateSetter: setIsDoneCreatingEmployee}],apiFunction: async () => {
         return await UseFetchFindManyEmployee()
     }})
     
@@ -35,8 +36,7 @@ const page = () => {
                   <TableHead>Nomor Telefon</TableHead>
                   <TableHead>Gaji (Per Hari)</TableHead>
                   <TableHead>Transportasi (Per Hari)</TableHead>
-                  {/* <TableHead>Status Aktif</TableHead> */}
-                  {/* <TableHead>Aksi</TableHead> */}
+                  <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -46,8 +46,9 @@ const page = () => {
                     <TableCell>{employee.name}</TableCell>
                     <TableCell>{employee.role}</TableCell>
                     <TableCell>{employee.phoneNumber}</TableCell>
-                    <TableCell>Rp{formatPrice({value: employee?.salaryPerDay.toString()})}</TableCell>
-                    <TableCell>Rp{formatPrice({value: employee?.transportPerDay.toString()})}</TableCell>
+                    <TableCell>Rp{formatPrice({value: employee.salaryPerDay ? employee?.salaryPerDay.toString() : "0"})}</TableCell>
+                    <TableCell>Rp{formatPrice({value: employee.transportPerDay ? employee?.transportPerDay.toString() : "0"})}</TableCell>
+                    <TableCell><AttendanceEmployee employeeId={employee.id!} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>

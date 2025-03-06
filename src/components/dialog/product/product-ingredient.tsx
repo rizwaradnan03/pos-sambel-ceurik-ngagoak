@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyIngredientNotByProductId } from '@/hooks/api/ingredient/findManyNotByProductId'
 import { UseCreateProductIngredient } from '@/hooks/api/product-ingredient/create'
+import { UseDeleteProductIngredient } from '@/hooks/api/product-ingredient/delete'
 import { UseFetchFindManyProductIngredientByProductId } from '@/hooks/api/product-ingredient/findManyByProductId'
 import { UseFetch } from '@/hooks/use-fetch'
 import { IFProductIngredient } from '@/interfaces/form-interface'
@@ -69,6 +70,17 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
         }
     }
 
+    const handleDeleteDose = async ({productIngredientId}: {productIngredientId: string}) => {
+        try {
+            const deleteProductIngredient = await UseDeleteProductIngredient({id: productIngredientId})
+
+            toast.success("Berhasil menghapus dosis!")
+            setIsDoseProductDialogOpen(false)
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
+
     return (
         <Dialog onOpenChange={setIsDoseProductDialogOpen} open={isDoseProductDialogOpen}>
             <DialogTrigger asChild>
@@ -109,6 +121,7 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
                                     <TableHead>Bahan</TableHead>
                                     <TableHead>Dosis</TableHead>
                                     <TableHead>Satuan</TableHead>
+                                    <TableHead>Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -118,6 +131,7 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
                                     <TableCell>{productIngredient.Ingredient?.name}</TableCell>
                                     <TableCell>{productIngredient.dose}</TableCell>
                                     <TableCell>{productIngredient.Ingredient?.unitOfMeasure}</TableCell>
+                                    <TableCell><Button onClick={() => handleDeleteDose({productIngredientId: productIngredient.id as string})}>Hapus</Button></TableCell>
                                 </TableRow>
                                 ))}
                             </TableBody>

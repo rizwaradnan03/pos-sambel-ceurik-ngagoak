@@ -12,13 +12,17 @@ import { inventoryUrlItems } from '@/data/sidebar/inventory'
 import { analyticsUrlItems } from '@/data/sidebar/analytics'
 import Link from 'next/link'
 import { adminUrlItems } from '@/data/sidebar/admin'
+import { signOut } from 'next-auth/react'
 
 const Sidebar = ({ children, role }: { children: TReactNode, role: RoleEnum }) => {
     const [renderSidebar, setRenderSidebar] = useState<ISidebarItems[] | undefined>(undefined)
 
-
     const handleLogout = () => {
-
+        try {
+            signOut()
+        } catch (error: any) {
+            toast.error(error.message)
+        }
     }
 
     useEffect(() => {

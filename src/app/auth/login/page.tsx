@@ -1,5 +1,6 @@
 "use client";
 
+import Logo from "../../../../public/assets/logo.png"
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import React, { useEffect, useState, Suspense } from 'react';
 import toast from 'react-hot-toast';
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from "next/image";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -53,7 +55,12 @@ const LoginForm = () => {
     return (
         <div className='flex justify-center items-center min-h-screen'>
             <Card className='w-[350px]'>
-                <CardHeader className='text-xl text-center'>Halaman Login</CardHeader>
+                <div className="flex justify-center p-4">
+                    <Image src={Logo} width={150} height={150} alt="Logo" />
+                </div>
+                <CardHeader className='text-xl text-center'>
+                    Halaman Login
+                </CardHeader>
                 <CardContent>
                     <div className="grid w-full items-center gap-4">
                         <div className="flex flex-col space-y-1.5">

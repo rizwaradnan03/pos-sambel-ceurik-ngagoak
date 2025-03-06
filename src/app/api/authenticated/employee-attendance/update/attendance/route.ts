@@ -5,22 +5,25 @@ export async function PATCH(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    const { isPayed }: { isPayed: boolean } = await req.json();
+
+    const { transportation } = await req.json();
+    
 
     if (!id) {
       return;
     }
 
-    const update = await prisma.employeeSalaryPay.update({
-        data: {
-            isPayed: isPayed
-        },
-        where: {
-            id: id
-        }
-    })
+    const data = await prisma.employeeAttendance.update({
+      where: {
+        id: id,
+      },
+      data: {
+        isPresent: true,
+        isTransport: transportation
+      }
+    });
 
-    return NextResponse.json({ data: update });
+    return NextResponse.json({ data: data });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
