@@ -4,29 +4,18 @@ import CreatePackage from '@/components/dialog/package/create-package'
 import SaveProductPackage from '@/components/dialog/package/save-product-package'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyPackage } from '@/hooks/api/package/findMany'
+import { UseFetch } from '@/hooks/use-fetch'
 import { ISPackage } from '@/interfaces/schema-interface'
 import { formatPrice } from '@/lib/number'
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import React, { useState } from 'react'
 
 const page = () => {
-    const [packages, setPackages] = useState<ISPackage[] | undefined>(undefined)
-
     const [isDoneCreatingPackage, setIsDoneCreatingPackage] = useState<boolean>(false)
+    const [isDoneUpdatingPackage, setIsDoneUpdatingPackage] = useState<boolean>(false)
 
-    const fetchPackage = async () => {
-        try {
-            const fetch = await UseFetchFindManyPackage()
-
-            setPackages(fetch.data)
-        } catch (error: any) {
-            toast.error(error.message)
-        }
-    }
-
-    useEffect(() => {
-        fetchPackage()
-    }, [isDoneCreatingPackage])
+      const {data: dataPackage} = UseFetch<ISPackage[]>({key: 'inventoryPackage', dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingPackage, stateSetter: setIsDoneCreatingPackage}, {stateValue: isDoneUpdatingPackage, stateSetter: setIsDoneUpdatingPackage}], apiFunction: async() => {
+          return await UseFetchFindManyPackage()
+        }})
 
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
@@ -50,7 +39,7 @@ const page = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {packages?.map((pkg, index) => (
+                {dataPackage?.map((pkg, index) => (
                   <TableRow key={pkg.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{pkg.name}</TableCell>

@@ -1,8 +1,6 @@
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Select } from '@/components/ui/select'
-import { UseUpdateEmployeeSalaryPayIsPayed } from '@/hooks/api/employee-salary-pay/updateIsPayed'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'    
+import { UseUpdateEmployeeSalarySummaryIsPayed } from '@/hooks/api/employee-salary-summary/updateIsPayed'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -11,7 +9,7 @@ const UpdateEmployeeSalaryPayIsPayed = ({ employeeSalaryPayId, setIsDoneUpdating
 
     const handleUpdateIsPayed = async () => {
         try {
-            await UseUpdateEmployeeSalaryPayIsPayed({ id: employeeSalaryPayId, isPayed: true })
+            await UseUpdateEmployeeSalarySummaryIsPayed({ id: employeeSalaryPayId, isPayed: true })
 
             setIsDoneUpdatingEmployeeSalaryPay(true)
             setIsUpdateEmployeeSalaryPayDialogOpen(false)

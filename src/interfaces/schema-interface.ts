@@ -159,18 +159,11 @@ export interface ISEmployee extends ICommon {
     name: string;
     phoneNumber: string;
     salaryPerDay: number;
-    transportPerDay: number;
+    transport: number;
     isActive: boolean
     role: "CASHIER" | "CHEF"
 
-    EmployeeSalaryPay?: ISEmployeeSalaryPay[]
-}
-
-export interface ISEmployeeSalaryPay extends ICommon {
-    employeeId: string;
-    isPayed: boolean;
-
-    Employee?: ISEmployee
+    EmployeeSalarySummary?: ISEmployeeSalarySummary[]
 }
 
 export interface ISEmployeeAttendance extends ICommon {

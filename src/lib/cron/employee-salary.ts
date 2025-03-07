@@ -1,4 +1,3 @@
-import { dateCurrentMonth, dateCurrentYear } from "@/data/date";
 import { prisma } from "../prisma";
 import * as cron from "node-cron";
 
@@ -55,13 +54,10 @@ export const startCronJob = () => {
           })
           
           const totalDays = getLastDayOfMonth(dateCurrentYear, dateCurrentMonth);
-          console.log("that total days ", totalDays)
           const countOfAbsent = totalDays - countOfPresent;
           const salaryPerDay = Number(employee.salaryPerDay);
-          const transportPerDay = Number(employee.transportPerDay);
   
           const totalSalary = countOfPresent * salaryPerDay;
-          const totalTransport = countOfTransport * transportPerDay;
           const totalCut = countOfAbsent * salaryPerDay;
   
           await prisma.employeeSalarySummary.create({
@@ -70,7 +66,7 @@ export const startCronJob = () => {
               month: dateCurrentMonth,
               year: dateCurrentYear,
               totalSalary: totalSalary,
-              totalTransport: totalTransport,
+              totalTransport: employee.transport,
               totalCut: totalCut,
               isPayed: false,
             },

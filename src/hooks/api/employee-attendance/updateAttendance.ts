@@ -1,12 +1,9 @@
 import { ApiManager } from "@/lib/api"
 
-export const UseUpdateEmployeeAttendance = async ({id, transportation}: {id: string, transportation: boolean}) => {
+export const UseUpdateEmployeeAttendance = async ({id}: {id: string,}) => {
     try {
         const fetch = await ApiManager(`/employee-attendance/update/attendance?id=${id}`, {
             method: 'PATCH',
-            data: {
-                transportation: transportation
-            }
         })
 
         return fetch.data

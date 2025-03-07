@@ -6,12 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest){
     try {
         const {name, price, image}: IFPackage = await req.json();
-        console.log("Data name ", name)
 
         let imageName: string | undefined;
 
         if(image){
-            const {fileUrl} = await UseDecodedBase64ToFile({base64String: image, dir: "product"})
+            const {fileUrl} = await UseDecodedBase64ToFile({base64String: image, dir: "package"})
             console.log("file url nyaa ", fileUrl)
             imageName = fileUrl;
         }

@@ -72,7 +72,7 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
 
     const handleDeleteDose = async ({productIngredientId}: {productIngredientId: string}) => {
         try {
-            const deleteProductIngredient = await UseDeleteProductIngredient({id: productIngredientId})
+            await UseDeleteProductIngredient({id: productIngredientId})
 
             toast.success("Berhasil menghapus dosis!")
             setIsDoseProductDialogOpen(false)
@@ -83,7 +83,7 @@ const ProductIngredient = ({ productId }: { productId: string }) => {
 
     return (
         <Dialog onOpenChange={setIsDoseProductDialogOpen} open={isDoseProductDialogOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger asChild className="bg-green-500">
                 <Button><Plus /> Dosis Bahan</Button>
             </DialogTrigger>
             <DialogContent>

@@ -6,7 +6,6 @@ export async function PATCH(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
-    const { transportation } = await req.json();
     
 
     if (!id) {
@@ -19,7 +18,6 @@ export async function PATCH(req: NextRequest) {
       },
       data: {
         isPresent: true,
-        isTransport: transportation
       }
     });
 

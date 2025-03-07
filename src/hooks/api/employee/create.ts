@@ -1,4 +1,4 @@
-import { IFEmployee, IFExpense } from "@/interfaces/form-interface"
+import { IFEmployee } from "@/interfaces/form-interface"
 import { ApiManager } from "@/lib/api"
 
 export const UseCreateEmployee = async ({data}: {data: IFEmployee}) => {

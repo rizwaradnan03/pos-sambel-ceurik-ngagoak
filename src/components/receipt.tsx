@@ -38,7 +38,7 @@ const Receipt = forwardRef<HTMLDivElement, { order: Order }>(({ order }, ref) =>
                 </tbody>
             </table>
             <hr className="border-t border-gray-300 my-2" />
-            {order.taxAmount && (
+            {order.taxAmount && order.taxAmount > 0 && (
                 <div className="flex justify-between text-gray-700 mb-2">
                     <p>Pajak:</p>
                     <p>{formatPrice({ value: order.taxAmount.toString() })}</p>

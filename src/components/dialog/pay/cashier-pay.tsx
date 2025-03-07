@@ -49,16 +49,17 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 totalPrice: isTaxEnable ? totalPrice : originalPrice,
                 taxAmount: isTaxEnable ? taxAmount : 0
             } as IFOrder
-            console.log("payloaddd nya ", payload)
             const createOrder = await UseCreateOrder({ data: payload })
             if (createOrder) {
                 handlePrint()
                 toast.success("Berhasil membuat pesanan!")
                 setIsCashierPayDialogOpen(false)
                 setIsDoneCreatingOrder(true)
+                setTaxAmount(0)
             }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
+            toast.error(error.message)
         }
     }
 
@@ -103,7 +104,6 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
         setIsTaxEnable(undefined)
     }, [cart])
 
-    console.log("original price nya ", originalPrice)
 
     return (
         <>

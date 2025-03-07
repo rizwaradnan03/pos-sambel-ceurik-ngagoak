@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const { name, phoneNumber, salaryPerDay, transportPerDay, isActive, role }: IFEmployee = await req.json();
+        const { name, phoneNumber, salaryPerDay, transport, isActive, role }: IFEmployee = await req.json();
 
 
         const create = await prisma.employee.create({
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
                 name: name,
                 phoneNumber: phoneNumber,
                 salaryPerDay: salaryPerDay,
-                transportPerDay: transportPerDay,
+                transport: transport,
                 isActive: isActive,
                 role: role
             }

@@ -298,7 +298,7 @@ model Employee {
   phoneNumber    String           @map("phone_number")
   role           RoleEmployeeEnum
   salaryPerDay   Decimal @map("salary_per_day")
-  transportPerDay Decimal @map("transport_per_day")
+  transport Decimal @map("transport")
   isActive       Boolean          @default(true)
 
   createdAt DateTime @default(now()) @map("created_at")

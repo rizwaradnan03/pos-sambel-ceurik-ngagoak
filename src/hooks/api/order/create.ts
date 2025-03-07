@@ -1,4 +1,4 @@
-import { IFOrder, IFPackage } from "@/interfaces/form-interface";
+import { IFOrder } from "@/interfaces/form-interface";
 import { ApiManager } from "@/lib/api";
 
 export const UseCreateOrder = async ({data}: {data: IFOrder}) => {

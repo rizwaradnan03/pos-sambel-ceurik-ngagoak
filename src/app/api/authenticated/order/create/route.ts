@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
               const updatedStock = Number(ingredient.stock) - totalDoseNeeded;
   
               if (updatedStock < 0) {
+                console.log("aino")
                 throw new Error(
                   `Stok bahan untuk ${item.name} tidak mencukupi! Dibutuhkan: ${totalDoseNeeded}, tersedia: ${ingredient.stock}`
                 );

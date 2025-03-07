@@ -35,7 +35,7 @@ const page = () => {
                   <TableHead>Jabatan</TableHead>
                   <TableHead>Nomor Telefon</TableHead>
                   <TableHead>Gaji (Per Hari)</TableHead>
-                  <TableHead>Transportasi (Per Hari)</TableHead>
+                  <TableHead>Transportasi</TableHead>
                   <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -47,7 +47,7 @@ const page = () => {
                     <TableCell>{employee.role}</TableCell>
                     <TableCell>{employee.phoneNumber}</TableCell>
                     <TableCell>Rp{formatPrice({value: employee.salaryPerDay ? employee?.salaryPerDay.toString() : "0"})}</TableCell>
-                    <TableCell>Rp{formatPrice({value: employee.transportPerDay ? employee?.transportPerDay.toString() : "0"})}</TableCell>
+                    <TableCell>Rp{formatPrice({value: employee.transport ? employee?.transport.toString() : "0"})}</TableCell>
                     <TableCell><AttendanceEmployee employeeId={employee.id!} /></TableCell>
                   </TableRow>
                 ))}

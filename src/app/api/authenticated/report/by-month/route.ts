@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     let expenseAmount = 0;
     let employeeSalaryPayAmount = 0;
-    let ingredientPurchaseAmount = 0
+    let ingredientPurchaseAmount = 0;
 
     const orders = await prisma.$queryRawUnsafe<
       { taxAmount: number; totalPrice: number; totalCost: number }[]
@@ -69,30 +69,36 @@ export async function POST(req: NextRequest) {
     }
 
     const employeeSalaryPays = await prisma.$queryRawUnsafe<
-      { name: string; amount: number }[]
+      { name: string; salary: number; transport: number; cut: number }[]
     >(
-      `SELECT employees.name as name, SUM(employee_salary_pays.amount) as amount 
-       FROM employee_salary_pays 
-       INNER JOIN employees ON employees.id = employee_salary_pays.employee_id 
-       WHERE is_payed = true 
-       AND MONTH(employee_salary_pays.created_at) = ${currentMonth} 
-       AND YEAR(employee_salary_pays.created_at) = ${currentYear} 
-       GROUP BY employees.name`
+      `SELECT employees.name as name, SUM(employee_salary_summaries.total_salary) as salary,
+      SUM(employee_salary_summaries.total_transport) as transport, SUM(employee_salary_summaries.total_cut) as cut
+      FROM employee_salary_summaries INNER JOIN employees 
+      ON employees.id = employee_salary_summaries.employee_id 
+      WHERE employee_salary_summaries.month = '${currentMonth}' AND 
+      employee_salary_summaries.year = '${currentYear}' AND employee_salary_summaries.is_payed = true GROUP BY employees.name`
     );
+
     for (let i = 0; i < employeeSalaryPays.length; i++) {
-      employeeSalaryPayAmount += Number(employeeSalaryPays[i].amount);
+      employeeSalaryPayAmount +=
+        Number(employeeSalaryPays[i].salary) +
+        Number(employeeSalaryPays[i].transport) -
+        Number(employeeSalaryPays[i].cut);
     }
 
-    const ingredientPurchases =
-      await prisma.$queryRawUnsafe<{name: string, amount: number}[]>(`SELECT ingredients.name as name, SUM(ingredient_purchases.total_cost) as amount FROM ingredient_purchases INNER JOIN ingredients ON ingredients.id = ingredient_purchases.ingredient_id WHERE MONTH(ingredient_purchases.created_at) = ${currentMonth} 
+    const ingredientPurchases = await prisma.$queryRawUnsafe<
+      { name: string; amount: number }[]
+    >(`SELECT ingredients.name as name, SUM(ingredient_purchases.total_cost) as amount FROM ingredient_purchases INNER JOIN ingredients ON ingredients.id = ingredient_purchases.ingredient_id WHERE MONTH(ingredient_purchases.created_at) = ${currentMonth} 
        AND YEAR(ingredient_purchases.created_at) = ${currentYear}  GROUP BY name`);
-    for(let i = 0;i < ingredientPurchases.length;i++){
-      ingredientPurchaseAmount += Number(ingredientPurchases[i].amount)
+    for (let i = 0; i < ingredientPurchases.length; i++) {
+      ingredientPurchaseAmount += Number(ingredientPurchases[i].amount);
     }
+
+    const pendapatan = saleAmount - costAmount 
 
     const incomeRow = workSheetLabaRugi.addRow({
       title: "Pendapatan",
-      amount: formatPrice({ value: saleAmount - costAmount }),
+      amount: formatPrice({ value: pendapatan }),
     });
     incomeRow.getCell("title").font = { bold: true, size: 12 };
     incomeRow.getCell("amount").font = { bold: true, size: 12 };
@@ -120,25 +126,30 @@ export async function POST(req: NextRequest) {
     workSheetLabaRugi.addRow({});
     workSheetLabaRugi.addRow({});
 
+    const biaya = employeeSalaryPayAmount + expenseAmount + ingredientPurchaseAmount
+
     const costRow = workSheetLabaRugi.addRow({
       title: "Biaya Biaya",
-      amount: formatPrice({ value: employeeSalaryPayAmount + expenseAmount + ingredientPurchaseAmount }),
+      amount: formatPrice({
+        value:
+          biaya,
+      }),
     });
     costRow.getCell("title").font = { bold: true, size: 12 };
     costRow.getCell("amount").font = { bold: true, size: 12 };
 
-    if(ingredientPurchases.length > 0){
+    if (ingredientPurchases.length > 0) {
       const ingredientPurchaseRow = workSheetLabaRugi.addRow({
         title: "Biaya Belanja",
-        amount: formatPrice({value: ingredientPurchaseAmount})
-      })
+        amount: formatPrice({ value: ingredientPurchaseAmount }),
+      });
 
       ingredientPurchases.forEach((purchase, index) => {
         workSheetLabaRugi.addRow({
-          title:`(${index + 1}) ${purchase.name}`,
+          title: `(${index + 1}) ${purchase.name}`,
           amount: formatPrice({ value: Number(purchase.amount) }),
-        })
-      })
+        });
+      });
     }
 
     if (employeeSalaryPays.length > 0) {
@@ -151,7 +162,12 @@ export async function POST(req: NextRequest) {
       employeeSalaryPays.forEach((salary, index) => {
         workSheetLabaRugi.addRow({
           title: `(${index + 1}) ${salary.name}`,
-          amount: formatPrice({ value: Number(salary.amount) }),
+          amount: formatPrice({
+            value:
+              Number(salary.salary) +
+              Number(salary.transport) -
+              Number(salary.cut),
+          }),
         });
       });
     }
@@ -177,7 +193,7 @@ export async function POST(req: NextRequest) {
       title: "Laba (Pendapatan - Biaya Biaya)",
       amount: formatPrice({
         value:
-          saleAmount - costAmount - (employeeSalaryPayAmount + expenseAmount),
+          pendapatan - biaya
       }),
     });
     profitRow.getCell("title").font = { bold: true, size: 13 };

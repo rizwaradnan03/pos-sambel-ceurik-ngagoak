@@ -83,5 +83,5 @@ export interface IFEmployee {
     role: "CASHIER" | "CHEF";
     salaryPerDay: number;
     isActive: boolean;
-    transportPerDay: number;
+    transport: number;
 }
