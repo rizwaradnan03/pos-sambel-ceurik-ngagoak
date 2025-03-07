@@ -12,7 +12,7 @@ export const startCronJob = () => {
     const dateCurrentMonth = now.getMonth() + 1;
     const lastDay = getLastDayOfMonth(dateCurrentYear, dateCurrentMonth);
   
-    // if (now.getDate() === lastDay) {
+    if (now.getDate() === lastDay) {
       console.log("It's the last day of the month, running job...");
   
       const employees = await prisma.employee.findMany({
@@ -76,9 +76,9 @@ export const startCronJob = () => {
       } else {
         console.log("Salary summary already created, skipping...");
       }
-    // } else {
-    //   console.log("Not the last day of the month, skipping...");
-    // }
+    } else {
+      console.log("Not the last day of the month, skipping...");
+    }
   });
   
 
