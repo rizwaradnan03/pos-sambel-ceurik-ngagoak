@@ -6,12 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { UseSaveCategoryItem } from '@/hooks/api/category/save'
 import { UseFetchFindManyPackageByCategoryId } from '@/hooks/api/package/findManyByCategoryId'
 import { UseFetchFindManyPackageNotByCategoryId } from '@/hooks/api/package/findManyNotByCategoryId'
+import { UseDeleteProductCategory } from '@/hooks/api/product-category/delete'
 import { UseFetchFindManyProductByCategoryId } from '@/hooks/api/product/findManyByCategoryId'
 import { UseFetchFindManyProductNotByCategoryId } from '@/hooks/api/product/findManyNotByCategoryId'
 import { ICCategoryItem } from '@/interfaces/custom-interface'
 import { IFCategorySave } from '@/interfaces/form-interface'
 import { ISPackage, ISProduct } from '@/interfaces/schema-interface'
-import { Plus } from 'lucide-react'
+import { Delete, Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -113,6 +114,18 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
         }
     }
 
+    const handleDeleteProductCategory = async ({id}: {id: string}) => {
+        try {
+            await UseDeleteProductCategory({id: id})
+
+            toast.success("Berhasil menghapus item pada kategori!")
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
+
+    console.log("the category id ", categoryId)
+
     return (
         <Dialog onOpenChange={setIsSaveCategoryDialogOpen} open={isSaveCategoryDialogOpen}>
             <DialogTrigger asChild>
@@ -120,7 +133,7 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Tambah Produk ke Paket</DialogTitle>
+                    <DialogTitle>Tambah Produk / Paket ke kategori</DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-col gap-2">
                     <Label>Pilih Produk</Label>
@@ -139,6 +152,7 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
                             <TableRow>
                                 <TableHead>No</TableHead>
                                 <TableHead>Nama Item</TableHead>
+                                {/* <TableHead>Aksi</TableHead> */}
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -146,6 +160,7 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
                                 <TableRow key={index + 1}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{item.name}</TableCell>
+                                    {/* <TableCell><Button onClick={() => handleDeleteProductCategory({id: item.id as string})}><Delete/> Hapus</Button></TableCell> */}
                                 </TableRow>
                             ))}
                         </TableBody>

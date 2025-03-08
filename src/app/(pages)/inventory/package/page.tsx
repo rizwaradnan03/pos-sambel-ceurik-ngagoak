@@ -2,6 +2,7 @@
 
 import CreatePackage from '@/components/dialog/package/create-package'
 import SaveProductPackage from '@/components/dialog/package/save-product-package'
+import UpdatePackage from '@/components/dialog/package/update-package'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyPackage } from '@/hooks/api/package/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
@@ -35,6 +36,7 @@ const page = () => {
                   <TableHead>No</TableHead>
                   <TableHead>Nama</TableHead>
                   <TableHead>Harga</TableHead>
+                  <TableHead>List</TableHead>
                   <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -46,6 +48,9 @@ const page = () => {
                     <TableCell>Rp{formatPrice({value: pkg.price.toString()})}</TableCell>
                     <TableCell>
                       <SaveProductPackage packageId={pkg.id!} />
+                    </TableCell>
+                    <TableCell>
+                      <UpdatePackage packageId={pkg.id as string} setIsDoneUpdatingPackage={setIsDoneUpdatingPackage} />
                     </TableCell>
                   </TableRow>
                 ))}

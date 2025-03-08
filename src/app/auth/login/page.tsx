@@ -26,31 +26,68 @@ const LoginForm = () => {
         }
     }, [searchParams]);
 
+    // const handleLogin = async () => {
+    //     if (!email || !password) {
+    //         toast.error("Email / Password Dibutuhkan!");
+    //         return;
+    //     }
+
+    //     try {
+    //         const login = await signIn("credentials", {
+    //             redirect: false,
+    //             email,
+    //             password,
+    //             callbackUrl,
+    //         });
+
+    //         if (login?.error) {
+    //             toast.error("Gagal Login! Periksa email dan password.");
+    //             return;
+    //         }
+    //         toast.success("Berhasil Login!");
+
+    //         router.push(callbackUrl);
+    //     } catch (error) {
+    //         toast.error("Terjadi kesalahan saat login!");
+    //     }
+    // };
+
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error("Email / Password Dibutuhkan!");
             return;
         }
-
+    
         try {
             const login = await signIn("credentials", {
                 redirect: false,
                 email,
                 password,
-                callbackUrl,
             });
-
+    
             if (login?.error) {
                 toast.error("Gagal Login! Periksa email dan password.");
                 return;
             }
-            toast.success("Berhasil Login!");
 
-            router.push(callbackUrl);
+            toast.success("Berhasil melakukan login!")
+            if(email == "admin@gmail.com"){
+                router.push("/admin")
+            }
+            else if(email == "cashier@gmail.com"){
+                router.push("/cashier")
+            }
+            else if(email == "inventory@gmail.com"){
+                router.push("/inventory")
+            }
+            else if(email == "analytics@gmail.com"){
+                router.push("/analytics")
+            }
         } catch (error) {
             toast.error("Terjadi kesalahan saat login!");
         }
     };
+    
 
     return (
         <div className='flex justify-center items-center min-h-screen'>

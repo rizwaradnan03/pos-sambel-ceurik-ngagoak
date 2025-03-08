@@ -1,5 +1,5 @@
 import { Option } from "@/components/ui/multiple-selector";
-import { CategoryEnum, PaymentTypeEnum, UnitOfMeasureEnum } from "./schema-interface";
+import { CategoryEnum, UnitOfMeasureEnum } from "./schema-interface";
 
 export interface IFIngredient {
     name: string;
@@ -66,7 +66,7 @@ export interface IFOrder {
     isTaxEnable: boolean;
     totalPrice: number;
     taxAmount?: number;
-    paymentType: PaymentTypeEnum;
+    paymentType: string;
     cart: IFCartItem[];
 }
 

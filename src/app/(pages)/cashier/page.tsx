@@ -222,7 +222,7 @@ export default function ResponsiveCashierPage() {
         <ScrollArea className="flex-grow">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             {filteredItem?.map((product) => {
-              console.log("isi nextjs apiurale ", process.env.NEXT_PUBLIC_APP_URL + product.image!)
+              // console.log("isi nextjs apiurale ", process.env.NEXT_PUBLIC_APP_URL + product.image!)
               return (
 
               <Card key={product.id} className="bg-white overflow-hidden group hover:shadow-lg transition-shadow">

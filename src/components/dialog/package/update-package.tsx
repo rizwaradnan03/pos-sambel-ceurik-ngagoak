@@ -1,10 +1,11 @@
+"use client"
+
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { UseFetchFindOnePackageById } from '@/hooks/api/package/findOneById'
-import { UseFetchFindOneProductById } from '@/hooks/api/product/findOneById'
-import { UseUpdateProduct } from '@/hooks/api/product/update'
+import { UseUpdatePackage } from '@/hooks/api/package/update'
 import { UseFetch } from '@/hooks/use-fetch'
 import { ISProduct } from '@/interfaces/schema-interface'
 import { UseEncodeFileToBase64 } from '@/lib/base64/client'
@@ -37,7 +38,7 @@ const UpdatePackage = ({ packageId, setIsDoneUpdatingPackage }: {packageId: stri
                 image: image
             }
 
-            await UseUpdateProduct({data: payload, id: packageId})
+            await UseUpdatePackage({data: payload, id: packageId})
 
             setIsDoneUpdatingPackage(true)
             setIsDialogCreateProductOpen(false)

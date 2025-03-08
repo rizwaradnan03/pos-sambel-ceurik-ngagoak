@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UseCreateOrder } from '@/hooks/api/order/create'
 import { IFCartItem, IFOrder } from '@/interfaces/form-interface'
-import { PaymentTypeEnum } from '@/interfaces/schema-interface'
 import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useReactToPrint } from "react-to-print";
@@ -14,7 +13,7 @@ import { useReactToPrint } from "react-to-print";
 const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: { totalPrice: number, setTotalPrice: (value: number) => void,cart: IFCartItem[], setIsDoneCreatingOrder: (value: boolean) => void }) => {
     const [name, setName] = useState<string | undefined>(undefined)
     const [isTaxEnable, setIsTaxEnable] = useState<string | undefined>(undefined)
-    const [paymentMethod, setPaymentMethod] = useState<PaymentTypeEnum | undefined>(undefined)
+    const [paymentMethod, setPaymentMethod] = useState<string | undefined>(undefined)
 
     const [originalPrice, setOriginalPrice] = useState<number>(totalPrice)
     const [taxAmount, setTaxAmount] = useState<number>(0)
@@ -58,8 +57,9 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 setTaxAmount(0)
             }
         } catch (error: any) {
-            // toast.error(error.response.data.message)
-            toast.error(error.message)
+            console.log("isi eror kanjut ", error)
+            toast.error(error.response.data.message)
+            // toast.error(error.message)
         }
     }
 
@@ -108,7 +108,8 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
     return (
         <>
             <Dialog onOpenChange={setIsCashierPayDialogOpen} open={isCashierPayDialogOpen}>
-                <DialogTrigger><Button className='w-full text-md'>Bayar Sekarang</Button></DialogTrigger>
+                {/* <DialogTrigger><Button className='w-full text-md'>Bayar Sekarang</Button></DialogTrigger> */}
+                <DialogTrigger className='w-full text-md bg-primary p-2 rounded-sm text-white font-bold'>Bayar Sekarang</DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Bayar</DialogTitle>
@@ -119,7 +120,7 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label>Metode Pembayaran</Label>
-                        <Select onValueChange={(value) => setPaymentMethod(value as PaymentTypeEnum)}>
+                        <Select onValueChange={(value) => setPaymentMethod(value)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Pilih Metode Pembayaran" />
                             </SelectTrigger>

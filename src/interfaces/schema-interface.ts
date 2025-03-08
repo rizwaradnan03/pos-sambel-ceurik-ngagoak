@@ -7,7 +7,7 @@ export interface ICommon {
 // ENUMS
 export type RoleEnum = "ADMIN" | "CASHIER" | "INVENTORY" | "ANALYTICS";
 export type UnitOfMeasureEnum = "G" | "ML" | "PCS";
-export type PaymentTypeEnum = "CASH" | "CARD" | "TRANSFER";
+// export type PaymentTypeEnum = "CASH" | "CARD" | "TRANSFER";
 export type OrderStatusEnum = "DONE" | "ON_PROGRESS";
 export type CategoryEnum = "PRODUCT" | "PACKAGE";
 
@@ -111,7 +111,7 @@ export interface ISLogIngredient extends ICommon {
 // ORDERS & TRANSACTIONS
 export interface ISOrder extends ICommon {
     customer?: string;
-    paymentType: PaymentTypeEnum;
+    paymentType: string;
     totalPrice: number;
     totalCost: number;
     profit: number;

@@ -6,15 +6,15 @@ import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 
 const Dashboard = () => {
-  const [todaySales, setTodaySales] = useState(0);
-  const [thisMonthSales, setThisMonthSales] = useState(0);
+  const [todaySales, setTodaySales] = useState<number>(0);
+  const [thisMonthSales, setThisMonthSales] = useState<number>(0);
   const [dailySales, setDailySales] = useState({ labels: [], data: [] });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetch = await UseFetchReportDashboard();
-        console.log("hasil fetch dashboard", fetch);
+
         setTodaySales(fetch.data.todaySales);
         setThisMonthSales(fetch.data.thisMonthSales);
         setDailySales(fetch.data.dailySales);

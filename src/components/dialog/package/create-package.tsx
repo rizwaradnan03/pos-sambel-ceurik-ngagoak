@@ -17,12 +17,15 @@ const CreatePackage = ({ setIsDoneCreatingPackage }: { setIsDoneCreatingPackage:
     const [price, setPrice] = useState<string | undefined>(undefined)
 
     const [isDialogCreateProductOpen, setIsDialogCreateProductOpen] = useState<boolean>(false)
+    const [isButtonClicked, setIsButtonClicked] = useState<boolean>(false)
 
     const handleCreatePackage = async () => {
         if (!name || !price) {
             toast.error('Semua field harus diisi')
             return
         }
+
+        setIsButtonClicked(true)
 
         try {
             let formattedPrice = ""
@@ -42,6 +45,7 @@ const CreatePackage = ({ setIsDoneCreatingPackage }: { setIsDoneCreatingPackage:
 
             setIsDoneCreatingPackage(true)
             setIsDialogCreateProductOpen(false)
+            setIsButtonClicked(false)
             toast.success("Berhasil menambahkan data paket!")
         } catch (error: any) {
             toast.error(error.message)
@@ -80,7 +84,7 @@ const CreatePackage = ({ setIsDoneCreatingPackage }: { setIsDoneCreatingPackage:
                         <Input type='text' value={price} onChange={(e) => setPrice(formatPrice({ value: e.target.value }))} placeholder='contoh : 10.000' />
                     </div>
                     <div>
-                        <Button className='w-full' onClick={() => handleCreatePackage()}>Submit</Button>
+                        <Button className='w-full' onClick={() => handleCreatePackage()} disabled={isButtonClicked}>Submit</Button>
                     </div>
                 </DialogContent>
             </Dialog>

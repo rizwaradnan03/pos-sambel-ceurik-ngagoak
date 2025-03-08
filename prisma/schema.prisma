@@ -21,11 +21,11 @@ enum UnitOfMeasureEnum {
   PCS
 }
 
-enum PaymentTypeEnum {
-  CASH
-  CARD
-  TRANSFER
-}
+// enum PaymentTypeEnum {
+//   CASH
+//   CARD
+//   TRANSFER
+// }
 
 // ### USERS ###
 model User {
@@ -211,7 +211,7 @@ enum OrderStatusEnum {
 model Order {
   id          String          @id @default(uuid())
   customer    String?
-  paymentType PaymentTypeEnum
+  paymentType String
   totalPrice  Decimal
   totalCost   Decimal?
   profit      Decimal?
