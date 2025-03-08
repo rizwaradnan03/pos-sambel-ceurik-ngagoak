@@ -2,6 +2,7 @@
 
 import AttendanceEmployee from '@/components/dialog/employee/attendance-employee'
 import CreateEmployee from '@/components/dialog/employee/create-employee'
+import UpdateEmployee from '@/components/dialog/employee/update-employee'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { UseFetchFindManyEmployee } from '@/hooks/api/employee/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
@@ -11,8 +12,9 @@ import React, { useState } from 'react'
 
 const page = () => {
     const [isDoneCreatingEmployee, setIsDoneCreatingEmployee] = useState<boolean>(false)
+    const [isDoneUpdatingEmployee, setIsDoneUpdatingEmployee] = useState<boolean>(false)
 
-    const { data: dataEmployee } = UseFetch<ISEmployee[]>({ key: "adminEmployee", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingEmployee, stateSetter: setIsDoneCreatingEmployee}],apiFunction: async () => {
+    const { data: dataEmployee } = UseFetch<ISEmployee[]>({ key: "adminEmployee", dependencies: [], refetchDependencies: [{stateValue: isDoneCreatingEmployee, stateSetter: setIsDoneCreatingEmployee}, {stateValue: isDoneUpdatingEmployee, stateSetter: setIsDoneUpdatingEmployee}],apiFunction: async () => {
         return await UseFetchFindManyEmployee()
     }})
     
@@ -36,6 +38,7 @@ const page = () => {
                   <TableHead>Nomor Telefon</TableHead>
                   <TableHead>Gaji (Per Hari)</TableHead>
                   <TableHead>Transportasi</TableHead>
+                  <TableHead>Absensi</TableHead>
                   <TableHead>Aksi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -49,6 +52,7 @@ const page = () => {
                     <TableCell>Rp{formatPrice({value: employee.salaryPerDay ? employee?.salaryPerDay.toString() : "0"})}</TableCell>
                     <TableCell>Rp{formatPrice({value: employee.transport ? employee?.transport.toString() : "0"})}</TableCell>
                     <TableCell><AttendanceEmployee employeeId={employee.id!} /></TableCell>
+                    <TableCell><UpdateEmployee employeeId={employee.id as string} setIsDoneUpdatingEmployee={setIsDoneUpdatingEmployee} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>

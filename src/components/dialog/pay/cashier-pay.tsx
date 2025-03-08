@@ -57,7 +57,6 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 setTaxAmount(0)
             }
         } catch (error: any) {
-            console.log("isi eror kanjut ", error)
             toast.error(error.response.data.message)
             // toast.error(error.message)
         }
@@ -127,6 +126,7 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                             <SelectContent>
                                 <SelectItem value='CASH'>Cash</SelectItem>
                                 <SelectItem value='TRANSFER'>Transfer</SelectItem>
+                                <SelectItem value='QRIS'>Qris</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

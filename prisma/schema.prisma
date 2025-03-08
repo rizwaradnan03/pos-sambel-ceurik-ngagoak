@@ -287,16 +287,16 @@ model Expense {
   @@map("expenses")
 }
 
-enum RoleEmployeeEnum {
-  CASHIER
-  CHEF
-}
+// enum RoleEmployeeEnum {
+//   CASHIER
+//   CHEF
+// }
 
 model Employee {
   id             String           @id @default(uuid())
   name           String
   phoneNumber    String           @map("phone_number")
-  role           RoleEmployeeEnum
+  role           String
   salaryPerDay   Decimal @map("salary_per_day")
   transport Decimal @map("transport")
   isActive       Boolean          @default(true)

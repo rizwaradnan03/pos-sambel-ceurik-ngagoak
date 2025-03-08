@@ -72,7 +72,7 @@ const LoginForm = () => {
 
             toast.success("Berhasil melakukan login!")
             if(email == "admin@gmail.com"){
-                router.push("/admin")
+                router.push("/admin/backup")
             }
             else if(email == "cashier@gmail.com"){
                 router.push("/cashier")

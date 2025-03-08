@@ -3,7 +3,10 @@
 import { UseFetchReportDashboard } from '@/hooks/api/report/dashboard';
 import { formatPrice } from '@/lib/number';
 import React, { useEffect, useState } from 'react';
-import Chart from 'react-apexcharts';
+import dynamic from 'next/dynamic';
+
+// Import Chart dengan dynamic import tanpa SSR
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const Dashboard = () => {
   const [todaySales, setTodaySales] = useState<number>(0);
@@ -77,24 +80,21 @@ const Dashboard = () => {
       {/* Card untuk Total Penjualan Hari Ini */}
       <div className="bg-red-50 p-6 rounded-lg shadow-lg mb-8 border border-red-100">
         <h2 className="text-xl font-semibold mb-2 text-red-600">Total Penjualan Hari Ini</h2>
-        <p className="text-2xl text-red-600">Rp {formatPrice({value: todaySales.toString()})}</p>
+        <p className="text-2xl text-red-600">Rp {formatPrice({ value: todaySales.toString() })}</p>
       </div>
 
       {/* Card untuk Total Penjualan Bulan Ini */}
       <div className="bg-red-50 p-6 rounded-lg shadow-lg mb-8 border border-red-100">
         <h2 className="text-xl font-semibold mb-2 text-red-600">Total Penjualan Bulan Ini</h2>
-        <p className="text-2xl text-red-600">Rp {formatPrice({value: thisMonthSales.toString()})}</p>
+        <p className="text-2xl text-red-600">Rp {formatPrice({ value: thisMonthSales.toString() })}</p>
       </div>
 
       {/* Chart Pertumbuhan Penjualan Harian */}
       <div className="bg-red-50 p-6 rounded-lg shadow-lg border border-red-100">
         <h2 className="text-xl font-semibold mb-4 text-red-600">Pertumbuhan Penjualan Harian</h2>
-        <Chart
-          options={chartOptions}
-          series={chartSeries}
-          type="bar"
-          height={350}
-        />
+        {typeof window !== 'undefined' && (
+          <Chart options={chartOptions} series={chartSeries} type="bar" height={350} />
+        )}
       </div>
     </div>
   );
