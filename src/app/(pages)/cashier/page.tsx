@@ -169,6 +169,7 @@ export default function ResponsiveCashierPage() {
     if(isOrderDonePay == true){
       fetchOnProgressOrder()
       setIsDoneCreatingOrder(false)
+      setIsOrderDonePay(false)
     }
   }, [isOrderDonePay])
 

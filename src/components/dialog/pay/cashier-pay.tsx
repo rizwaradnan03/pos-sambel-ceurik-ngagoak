@@ -34,7 +34,6 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
     })
 
     const handleCreateOrder = async () => {
-        console.log("isi cart ", cart)
         if (!name || !paymentMethod || cart.length < 1) {
             toast.error("Harap semua field diisi!")
             return
@@ -59,10 +58,12 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 setTaxAmount(0)
                 setName(undefined)
                 setPhoneNumber(undefined)
+                setPaymentMethod(undefined)
             }
         } catch (error: any) {
-            toast.error(error.response.data.message)
+            // toast.error(error.response.data.message)
             // toast.error(error.message)
+            toast.error("Stok bahan baku tidak mencukupi!")
         }
     }
 
