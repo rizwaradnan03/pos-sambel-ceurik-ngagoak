@@ -12,7 +12,7 @@ import { UseFetchFindManyProductNotByCategoryId } from '@/hooks/api/product/find
 import { ICCategoryItem } from '@/interfaces/custom-interface'
 import { IFCategorySave } from '@/interfaces/form-interface'
 import { ISPackage, ISProduct } from '@/interfaces/schema-interface'
-import { Delete, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 

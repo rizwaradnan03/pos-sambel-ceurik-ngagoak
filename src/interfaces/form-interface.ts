@@ -63,6 +63,7 @@ export interface IFCartItem {
 
 export interface IFOrder {
     customer: string;
+    phoneNumber: string;
     isTaxEnable: boolean;
     totalPrice: number;
     taxAmount?: number;

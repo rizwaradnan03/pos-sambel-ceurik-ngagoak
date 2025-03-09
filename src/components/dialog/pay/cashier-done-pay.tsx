@@ -14,6 +14,7 @@ const CashierDonePay = ({orderId, setIsOrderDonePay}: {orderId: string, setIsOrd
             toast.success("Berhasil!")
 
             setIsOrderDonePay(true)
+            setIsDonePayDialogOpen(false)
         } catch (error: any) {
             toast.error(error.message)
         }

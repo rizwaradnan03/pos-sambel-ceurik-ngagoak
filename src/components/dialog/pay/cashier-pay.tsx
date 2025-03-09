@@ -12,6 +12,7 @@ import { useReactToPrint } from "react-to-print";
 
 const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: { totalPrice: number, setTotalPrice: (value: number) => void,cart: IFCartItem[], setIsDoneCreatingOrder: (value: boolean) => void }) => {
     const [name, setName] = useState<string | undefined>(undefined)
+    const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined)
     const [isTaxEnable, setIsTaxEnable] = useState<string | undefined>(undefined)
     const [paymentMethod, setPaymentMethod] = useState<string | undefined>(undefined)
 
@@ -44,6 +45,7 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 cart: cart,
                 isTaxEnable: isTaxEnable === "TRUE",
                 customer: name,
+                phoneNumber: phoneNumber,
                 paymentType: paymentMethod,
                 totalPrice: isTaxEnable ? totalPrice : originalPrice,
                 taxAmount: isTaxEnable ? taxAmount : 0
@@ -55,6 +57,8 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                 setIsCashierPayDialogOpen(false)
                 setIsDoneCreatingOrder(true)
                 setTaxAmount(0)
+                setName(undefined)
+                setPhoneNumber(undefined)
             }
         } catch (error: any) {
             toast.error(error.response.data.message)
@@ -116,6 +120,10 @@ const CashierPay = ({ totalPrice, setTotalPrice,cart, setIsDoneCreatingOrder }: 
                     <div className='flex flex-col gap-2'>
                         <Label>Nama Pembeli</Label>
                         <Input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='contoh : Akmal' />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label>Nomor Telepon</Label>
+                        <Input type='text' value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder='contoh : 0858*******' />
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label>Metode Pembayaran</Label>

@@ -7,12 +7,12 @@ export async function POST(req: NextRequest) {
     const data: IFOrder = await req.json();
 
     const createdData = await prisma.$transaction(async (trx) => {
-      try {
         let totalCost = 0;
   
         const createOrder = await trx.order.create({
           data: {
             customer: data.customer,
+            phoneNumber: data.phoneNumber,
             paymentType: data.paymentType,
             totalPrice: data.totalPrice,
           },
@@ -144,9 +144,6 @@ export async function POST(req: NextRequest) {
         });
   
         return createOrder;
-      } catch (error) {
-        throw error
-      }
     });
 
     return NextResponse.json(
@@ -157,7 +154,7 @@ export async function POST(req: NextRequest) {
     console.error("Error processing order:", error);
 
     return NextResponse.json(
-      { message: error.message, success: false },
+      { message: error.message },
       {status: 500}
     );
   }

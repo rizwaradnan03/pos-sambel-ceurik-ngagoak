@@ -211,6 +211,7 @@ enum OrderStatusEnum {
 model Order {
   id          String          @id @default(uuid())
   customer    String?
+  phoneNumber String?
   paymentType String
   totalPrice  Decimal
   totalCost   Decimal?

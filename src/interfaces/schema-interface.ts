@@ -111,6 +111,7 @@ export interface ISLogIngredient extends ICommon {
 // ORDERS & TRANSACTIONS
 export interface ISOrder extends ICommon {
     customer?: string;
+    phoneNumber?: string;
     paymentType: string;
     totalPrice: number;
     totalCost: number;

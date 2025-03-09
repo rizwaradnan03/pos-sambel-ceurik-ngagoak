@@ -16,7 +16,6 @@ import { UseFetchFindManyCategory } from "@/hooks/api/category/findMany"
 import { formatPrice } from "@/lib/number"
 import Image from "next/image"
 import CashierPay from "@/components/dialog/pay/cashier-pay"
-import { ICCartItem } from "@/interfaces/custom-interface"
 import { UseFetchFindManyPackage } from "@/hooks/api/package/findMany"
 import { UseFetchFindManyPackageByCategoryId } from "@/hooks/api/package/findManyByCategoryId"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -172,8 +171,6 @@ export default function ResponsiveCashierPage() {
       setIsDoneCreatingOrder(false)
     }
   }, [isOrderDonePay])
-
-  // console.log("isi next pablik app urael ", process.env.NEXT_PUBLIC_APP_URL)
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gradient-to-br from-red-50 to-red-100">
