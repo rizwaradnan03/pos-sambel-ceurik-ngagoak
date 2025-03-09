@@ -6,7 +6,7 @@ const getLastDayOfMonth = (year: number, month: number) => {
 };
 
 export const startCronJob = () => {
-  cron.schedule("* * * * *", async () => {
+  cron.schedule("0 18 * * *", async () => {
     const now = new Date();
     const dateCurrentYear = now.getFullYear();
     const dateCurrentMonth = now.getMonth() + 1;
