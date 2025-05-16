@@ -226,12 +226,21 @@ export default function ResponsiveCashierPage() {
               <Card key={product.id} className="bg-white overflow-hidden group hover:shadow-lg transition-shadow">
                 <CardContent className="p-0">
                   <div className="relative w-full h-72"> {/* Tambahkan kelas "relative" & atur tinggi */}
-                    <Image
-                      src={product.image ? process.env.NEXT_PUBLIC_APP_URL + product.image : ""}
+                  <div className="relative w-full h-64">
+  <img
+    src={product.image || "/placeholder.jpg"}
+    alt="Gambar Produk"
+    className="absolute top-0 left-0 w-full h-full object-fill"
+  />
+</div>
+
+                    {/* <Image
+                      // src={product.image ? process.env.NEXT_PUBLIC_APP_URL + product.image : ""}
+                      src={product.image ? product.image : ""}
                       fill
                       className="object-cover"
                       alt="Gambar Produk"
-                    />
+                    /> */}
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-semibold text-red-800 mb-2">{product.name}</h3>

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently \"next dev --turbopack\" \"tsx server/index.ts\"",
     "build": "next build && copyfiles -u 1 public/* dist/public",
-    "start": "cross-env NODE_ENV=production concurrently \"tsx server/index.ts\" \"next start\"",
+    "start": "cross-env NODE_ENV=production concurrently \"next start --turbopack\" \"tsx server/index.ts\" \"next start\"",
     "lint": "next lint"
   },
   "dependencies": {
