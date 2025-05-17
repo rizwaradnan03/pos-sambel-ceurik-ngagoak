@@ -124,7 +124,7 @@ const SaveCategory = ({ categoryId }: { categoryId: string }) => {
         }
     }
 
-    console.log("the category id ", categoryId)
+    // console.log("the category id ", categoryId)
 
     return (
         <Dialog onOpenChange={setIsSaveCategoryDialogOpen} open={isSaveCategoryDialogOpen}>

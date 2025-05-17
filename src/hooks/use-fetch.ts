@@ -1,14 +1,9 @@
-"use client";
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   IHUseFetchInterface,
   UseFetchResponse,
-} from "@/interfaces/api-interface";
-import { UseEpochFutureTime } from "@/lib/date";
-import { UseJsonStringify } from "@/lib/json";
-import { useEffect, useState } from "react";
-
-const cache = new Map<string, any>();
+} from "@/interfaces/api-interface"
+import { useEffect, useState } from "react"
 
 export const UseFetch = <T>({
   key,
@@ -16,99 +11,46 @@ export const UseFetch = <T>({
   refetchDependencies,
   apiFunction,
 }: IHUseFetchInterface): UseFetchResponse<T> => {
-  const [data, setData] = useState<T | undefined>(undefined);
-  const [error, setError] = useState<any | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [stringifiedKey, setStringifiedKey] = useState<string>("");
+  const [data, setData] = useState<T | undefined>(undefined)
+  const [error, setError] = useState<any | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const fetchData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const fetch = await apiFunction();
-      setData(fetch.data);
+      const fetch = await apiFunction()
+      setData(fetch.data)
 
-      cache.set(stringifiedKey, fetch.data);
-      cache.set(
-        stringifiedKey + "_time",
-        UseEpochFutureTime({ futureInMinute: 1 })
-      );
     } catch (error: any) {
-      setError(error.message);
+      setError(error.message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const createStringifiedKey = () => {
-    const stringifiedDependencies = UseJsonStringify({ data: dependencies });
-    setStringifiedKey(key + stringifiedDependencies);
-  };
 
   useEffect(() => {
-    createStringifiedKey();
-  }, [key, ...(dependencies || [])]);
+    fetchData()
+  }, [...(dependencies || [])])
+
 
   useEffect(() => {
-    if (stringifiedKey) {
-      let isHasKey = false;
-      const currentTime = Date.now();
-      if (cache.has(stringifiedKey + "_time")) {
-        if (currentTime > cache.get(stringifiedKey + "_time")) {
-          cache.delete(stringifiedKey);
-          cache.delete(stringifiedKey + "_time");
-        }
-      }
+    if (refetchDependencies && refetchDependencies.length > 0) {
+      let isFoundTrue = false
 
-      if (cache.has(stringifiedKey)) {
-        isHasKey = true;
-      }
-
-      if (isHasKey) {
-        setData(cache.get(stringifiedKey));
-        setIsLoading(false);
-      } else {
-        if (dependencies && dependencies?.length > 0) {
-          let isAbleToFetch = false;
-
-          for (let i = 0; i < dependencies?.length; i++) {
-            if (dependencies[i] || dependencies[i] == true) {
-              isAbleToFetch = true;
-            }
-          }
-
-          if (isAbleToFetch) {
-            fetchData();
-          }
-        } else {
-          fetchData();
-        }
-      }
-    }
-  }, [key, stringifiedKey, ...(dependencies || [])]);
-
-  const refetch = () => {
-    if (refetchDependencies) {
-      let isAbleToRefetch = false;
-
-      for (let i = 0; i < refetchDependencies?.length; i++) {
+      for (let i = 0; i < refetchDependencies.length; i++) {
         if (refetchDependencies[i].stateValue == true) {
-          isAbleToRefetch = true;
+          isFoundTrue = true
+          refetchDependencies[i].stateSetter(false)
         }
-        refetchDependencies[i].stateSetter(false);
       }
 
-      if (isAbleToRefetch) {
-        cache.delete(stringifiedKey);
-        cache.delete(stringifiedKey + "_time");
-
-        fetchData();
+      if(isFoundTrue){
+        console.log("Iyaapp ada")
+        window.location.reload();
       }
     }
-  };
+  }, [...(refetchDependencies || [])])
 
-  useEffect(() => {
-    refetch();
-  }, [...(refetchDependencies || [])]);
-
-  return { data, isLoading, error };
-};
+  return { data, isLoading, error }
+}

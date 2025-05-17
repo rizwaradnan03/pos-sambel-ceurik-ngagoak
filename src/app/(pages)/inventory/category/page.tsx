@@ -7,7 +7,6 @@ import { UseFetchFindManyCategory } from '@/hooks/api/category/findMany'
 import { UseFetch } from '@/hooks/use-fetch'
 import { ISCategory } from '@/interfaces/schema-interface'
 import React, {useState } from 'react'
-import toast from 'react-hot-toast'
 
 const page = () => {
     const [isDoneCreatingCategory, setIsDoneCreatingCategory] = useState<boolean>(false)
@@ -20,7 +19,7 @@ const page = () => {
         return data
     }})
 
-    console.log("data kategori ", dataCategories)
+    console.log("Nilai Set Is Done Creating CFategory ", isDoneCreatingCategory)
 
     return (
         <div className="w-full bg-white rounded-sm p-4 flex flex-col gap-4">
