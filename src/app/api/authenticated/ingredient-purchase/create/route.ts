@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
         if (!quantity || !totalCost || !ingredientId) {
             return NextResponse.json({ error: "Invalid input data" }, { status: 400 });
         }
-        console.log("cost kontol nya berapa ", totalCost)
         const pricePerUnit = totalCost / quantity;
 
         await prisma.ingredientPurchase.create({
