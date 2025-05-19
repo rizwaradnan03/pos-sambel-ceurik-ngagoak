@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
         host: "localhost",
         user: "root",
         password: "",
-        database: "sambel_ceurik_ngagoak",
+        database: "db_sambel_ceurik_ngagoak",
       },
       dumpToFile: filePath,
     });
