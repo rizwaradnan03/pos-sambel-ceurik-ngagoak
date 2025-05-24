@@ -1,6 +1,6 @@
 "use client";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -122,7 +122,9 @@ export default function ResponsiveCashierPage() {
     if (found) {
       setCart((prev) =>
         prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         )
       );
     } else {
@@ -193,7 +195,9 @@ export default function ResponsiveCashierPage() {
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <div className="py-4">
-                <h2 className="text-2xl font-bold mb-4 text-red-800">Kategori</h2>
+                <h2 className="text-2xl font-bold mb-4 text-red-800">
+                  Kategori
+                </h2>
                 <div className="grid grid-cols-2 gap-4">
                   {categories?.map((cat) => (
                     <Button
@@ -211,15 +215,16 @@ export default function ResponsiveCashierPage() {
           </Sheet>
         </div>
 
-        {/* Desktop Categories */}
-        <div className="hidden lg:block mb-4">
+        <div className="hidden lg:block mb-2">
           <h2 className="text-3xl font-bold mb-4 text-red-800">Kategori</h2>
-          <ScrollArea className="whitespace-nowrap">
-            <div className="flex space-x-4">
+          <ScrollArea className="w-full h-[80px] relative">
+            {" "}
+            <div className="flex space-x-2 min-w-max">
+              {" "}
               {categories?.map((cat) => (
                 <Card
                   key={cat.id}
-                  className={`inline-block transition cursor-pointer ${
+                  className={`inline-block transition cursor-pointer min-w-[120px] ${
                     selectedCategories.id === cat.id
                       ? "bg-red-100"
                       : "bg-white hover:bg-red-50"
@@ -234,10 +239,10 @@ export default function ResponsiveCashierPage() {
                 </Card>
               ))}
             </div>
+            <ScrollBar orientation="horizontal" /> {/* scrollbar horizontal */}
           </ScrollArea>
         </div>
 
-        {/* Search Input */}
         <div className="mb-6">
           <Input
             placeholder="Cari Produk..."
@@ -247,7 +252,9 @@ export default function ResponsiveCashierPage() {
         </div>
 
         {/* Menu Section */}
-        <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-red-800">Menu</h2>
+        <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-red-800">
+          Menu
+        </h2>
         <ScrollArea className="flex-grow">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {searchedItems && searchedItems.length > 0 ? (
@@ -359,9 +366,7 @@ export default function ResponsiveCashierPage() {
           <Separator className="my-4 bg-red-200" />
           <div className="flex justify-between text-lg font-bold text-red-800 mb-4">
             <span>Total:</span>
-            <span>
-              Rp {formatPrice({ value: totalPrice.toString() })}
-            </span>
+            <span>Rp {formatPrice({ value: totalPrice.toString() })}</span>
           </div>
           <CashierPay
             cart={cart}
