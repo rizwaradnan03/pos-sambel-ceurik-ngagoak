@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
     ];
 
     workSheetLogOrder.columns = [
-      { header: "Id Transaksi", key: "no", width: 20 },
+      { header: "No", key: "no", width: 20 },
+      { header: "Tanggal Pembelian", key: "paymentDate", width: 20 },
       { header: "Id Transaksi", key: "id", width: 20 },
       { header: "Nama Customer", key: "customer", width: 20 },
       { header: "Jenis Pembayaran", key: "paymentType", width: 20 },
@@ -60,18 +61,23 @@ export async function POST(req: NextRequest) {
       costAmount += Number(orders[i].totalCost);
     }
 
-    const orderLogs = await prisma.$queryRawUnsafe<ISOrder[]>(`SELECT * FROM orders`)
+    const orderLogs = await prisma.order.findMany();
+
+    console.log("Order Logs : ", orderLogs)
 
     orderLogs.forEach((order, index) => {
+      console.log("Created At Payment : ", order.createdAt)
+
       workSheetLogOrder.addRow({
         no: index + 1,
+        paymentDate: order.createdAt,
         id: order.id,
         customer: order.customer,
         paymentType: order.paymentType,
-        totalPrice: order.totalPrice,
-        profit: order.profit,
-        totalCost: order.totalCost,
-        taxAmount: order.taxAmount
+        totalPrice: Number(order.totalPrice),
+        profit: Number(order.profit),
+        totalCost: Number(order.totalCost),
+        taxAmount: Number(order.taxAmount)
       })
     })
 
