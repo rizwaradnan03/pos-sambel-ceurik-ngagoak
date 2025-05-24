@@ -106,7 +106,8 @@ export default function ResponsiveCashierPage() {
   const fetchCategory = async () => {
     try {
       const fetch = await UseFetchFindManyCategory();
-      setCategories([{ id: "all", title: "Semua" }, ...fetch.data]);
+      // setCategories([{ id: "all", title: "Semua" }, ...fetch.data]);
+      setCategories([{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },]);
     } catch (error) {
       toast.error("Gagal Melakukan Fetching Kategori");
     }
@@ -216,32 +217,30 @@ export default function ResponsiveCashierPage() {
         </div>
 
         <div className="hidden lg:block mb-2">
-          <h2 className="text-3xl font-bold mb-4 text-red-800">Kategori</h2>
-          <ScrollArea className="w-full h-[80px] relative">
-            {" "}
-            <div className="flex space-x-2 min-w-max">
-              {" "}
-              {categories?.map((cat) => (
-                <Card
-                  key={cat.id}
-                  className={`inline-block transition cursor-pointer min-w-[120px] ${
-                    selectedCategories.id === cat.id
-                      ? "bg-red-100"
-                      : "bg-white hover:bg-red-50"
-                  }`}
-                  onClick={() => setSelectedCategories(cat)}
-                >
-                  <CardContent className="py-2 px-4">
-                    <span className="text-lg font-semibold text-red-700">
-                      {cat.title}
-                    </span>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" /> {/* scrollbar horizontal */}
-          </ScrollArea>
+      <h2 className="text-3xl font-bold mb-3 text-red-800">Kategori</h2>
+      <ScrollArea className="w-full h-[80px] relative"> {/* tinggi tetap agar scroll area kelihatan */}
+        <div className="flex space-x-6 min-w-max"> {/* flex dan min-w-max agar child bisa scroll horizontal */}
+          {categories?.map((cat) => (
+            <Card
+              key={cat.id}
+              className={`inline-block transition cursor-pointer min-w-[120px] ${
+                selectedCategories.id === cat.id
+                  ? "bg-red-100"
+                  : "bg-white hover:bg-red-50"
+              }`}
+              onClick={() => setSelectedCategories(cat)}
+            >
+              <CardContent className="py-2 px-4">
+                <span className="text-lg font-semibold text-red-700">
+                  {cat.title}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
         </div>
+        <ScrollBar orientation="horizontal" /> {/* scrollbar horizontal */}
+      </ScrollArea>
+    </div>
 
         <div className="mb-6">
           <Input
