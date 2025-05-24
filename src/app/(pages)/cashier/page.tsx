@@ -106,8 +106,7 @@ export default function ResponsiveCashierPage() {
   const fetchCategory = async () => {
     try {
       const fetch = await UseFetchFindManyCategory();
-      // setCategories([{ id: "all", title: "Semua" }, ...fetch.data]);
-      setCategories([{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },{ id: "all", title: "Semua" },]);
+      setCategories([{ id: "all", title: "Semua" }, ...fetch.data]);
     } catch (error) {
       toast.error("Gagal Melakukan Fetching Kategori");
     }
