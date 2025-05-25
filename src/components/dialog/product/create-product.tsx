@@ -50,8 +50,6 @@ const CreateProduct = ({ setIsDoneCreatingProduct }: { setIsDoneCreatingProduct:
         }
     }
 
-    console.log("file nya ", image)
-
     return (
         <>
             <Dialog onOpenChange={setIsDialogCreateProductOpen} open={isDialogCreateProductOpen}>

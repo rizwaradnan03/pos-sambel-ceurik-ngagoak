@@ -249,7 +249,6 @@ export default function ResponsiveCashierPage() {
           />
         </div>
 
-        {/* Menu Section */}
         <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-red-800">
           Menu
         </h2>
