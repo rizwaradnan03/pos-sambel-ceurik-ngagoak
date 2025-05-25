@@ -5,7 +5,9 @@ interface Order {
     customer?: string;
     cart: { name: string; quantity: number; price: number }[];
     totalPrice: number;
-    taxAmount?: number; // Tambahkan taxAmount sebagai properti opsional
+    taxAmount?: number;
+    paymentMethod: "CASH" | "TRANSFER" | "QRIS" | undefined;
+    customerChanges: string | undefined
 }
 
 const Receipt = forwardRef<HTMLDivElement, { order: Order }>(({ order }, ref) => {
@@ -48,6 +50,13 @@ const Receipt = forwardRef<HTMLDivElement, { order: Order }>(({ order }, ref) =>
                 <p>Total:</p>
                 <p>Rp {formatPrice({ value: order.totalPrice.toString() })}</p>
             </div>
+            {order.paymentMethod === "CASH" && order.customerChanges && (
+    <div className="flex justify-between text-gray-700 mt-1">
+        <p>Kembalian:</p>
+        <p>Rp {formatPrice({ value: order.customerChanges })}</p>
+    </div>
+)}
+
             <p className="text-center mt-4 text-gray-600">Terima kasih atas pembelian Anda!</p>
         </div>
     );

@@ -37,7 +37,7 @@ const CashierPay = ({
   const [name, setName] = useState<string | undefined>(undefined);
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined);
   const [isTaxEnable, setIsTaxEnable] = useState<string | undefined>(undefined);
-  const [paymentMethod, setPaymentMethod] = useState<string | undefined>(
+  const [paymentMethod, setPaymentMethod] = useState<"CASH" | "TRANSFER" | "QRIS" | undefined>(
     undefined
   );
 
@@ -181,7 +181,11 @@ const CashierPay = ({
           </div>
           <div className="flex flex-col gap-2">
             <Label>Metode Pembayaran</Label>
-            <Select onValueChange={(value) => setPaymentMethod(value)}>
+            <Select onValueChange={(value) => {
+              if(value == "CASH" || value == "QRIS" || value == "TRANSFER"){
+                setPaymentMethod(value)
+              }
+              }}>
               <SelectTrigger>
                 <SelectValue placeholder="Pilih Metode Pembayaran" />
               </SelectTrigger>
@@ -250,7 +254,7 @@ const CashierPay = ({
       <div className="hidden">
         <Receipt
           ref={printRef}
-          order={{ customer: name, cart, totalPrice, taxAmount }}
+          order={{ customer: name, cart, totalPrice, taxAmount, paymentMethod: paymentMethod, customerChanges: customerChanges  }}
         />
       </div>
     </>
